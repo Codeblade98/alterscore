@@ -1,0 +1,25 @@
+{
+  "logistic_scorecard": {
+    "auc": 0.6851,
+    "ks": 0.3049,
+    "brier": 0.2277,
+    "gini": 0.3702
+  },
+  "xgboost": {
+    "auc": 0.6231,
+    "ks": 0.2251,
+    "brier": 0.1159,
+    "gini": 0.2462
+  },
+  "calibrated_xgboost": {
+    "auc": 0.6328,
+    "ks": 0.2514,
+    "brier": 0.1141,
+    "gini": 0.2655
+  },
+  "business": {
+    "approval_rate": 0.999,
+    "thin_file_inclusion_rate": 1.0,
+    "test_set_size": 1000
+  }
+}

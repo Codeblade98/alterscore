@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AlterScore — AI Credit Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--teal:#0d9488;--teal-dark:#0f766e;--teal-light:#ccfbf1;--indigo:#4f46e5;--slate:#475569;--bg:#f1f5f9;--surface:#fff;--border:#e2e8f0;--shadow:0 4px 24px rgba(15,23,42,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#0f172a;min-height:100vh}
+.navbar{background:#0f172a;padding:0 2rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#99f6e4;letter-spacing:-.5px}
+.logo span{color:#818cf8}
+.nav-right{display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b}
+.nav-badge{background:rgba(13,148,136,.2);border:1px solid rgba(13,148,136,.4);color:#5eead4;padding:3px 10px;border-radius:20px;font-weight:600}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 58px)}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 58px)}
+.main{padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 58px)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.75rem;color:#0f172a}
+h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:600;color:#0f172a;margin-bottom:.5rem}
+label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
+input,select,textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:#0f172a;background:#fff;outline:none;transition:border-color .2s}
+input:focus,select:focus{border-color:var(--teal)}
+.field{margin-bottom:.75rem}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.btn-primary{background:var(--teal-dark);color:#fff}
+.btn-primary:hover{background:var(--teal)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--slate);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal-dark)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s}
+.toggle-row.on{border-color:var(--teal);background:#f0fdfa}
+.toggle-row-left{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#334155}
+.toggle-switch{width:34px;height:18px;border-radius:9px;background:var(--border);position:relative;flex-shrink:0;transition:background .2s}
+.toggle-switch::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.on .toggle-switch{background:var(--teal-dark)}
+.on .toggle-switch::after{transform:translateX(16px)}
+.q-option{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:5px;cursor:pointer;font-size:13px;color:#334155;transition:all .15s;display:flex;align-items:center;gap:8px}
+.q-option:hover{border-color:var(--teal);background:#f0fdfa}
+.q-option.sel{border-color:var(--teal-dark);background:#f0fdfa;color:var(--teal-dark);font-weight:500}
+.q-badge{width:20px;height:20px;border-radius:5px;background:#f1f5f9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#94a3b8;flex-shrink:0}
+.sel .q-badge{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
+.step-tabs{display:flex;gap:4px;margin-bottom:1.25rem;background:#f1f5f9;border-radius:10px;padding:3px}
+.step-tab{flex:1;padding:7px;text-align:center;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;color:#64748b;transition:all .15s}
+.step-tab.active{background:var(--surface);color:var(--teal-dark);box-shadow:var(--shadow)}
+.score-hero{background:linear-gradient(135deg,#0f172a 0%,#134e4a 100%);border-radius:16px;padding:2rem;display:grid;grid-template-columns:1fr 200px;gap:1.5rem;align-items:center;margin-bottom:1rem}
+.big-score{font-family:'Syne',sans-serif;font-size:4.5rem;font-weight:800;color:#fff;line-height:1}
+.big-score small{font-size:1.6rem;color:#475569}
+.score-grade{display:inline-block;padding:4px 14px;border-radius:7px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-top:10px}
+.score-left p{color:#94a3b8;font-size:13px;margin-top:8px}
+.decision-badge{display:inline-block;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:700;margin-top:12px}
+.badge-APPROVED{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.badge-CONDITIONAL{background:rgba(217,119,6,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.badge-REVIEW{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)}
+.kv-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.kv-card{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.75rem;text-align:center}
+.kv-card .kv-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
+.kv-card .kv-val{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#0f172a}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.latent-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.latent-row:last-child{border-bottom:none}
+.latent-icon{width:26px;text-align:center;font-size:15px}
+.latent-label{width:120px;font-weight:500;color:#334155}
+.latent-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.latent-bar{height:100%;border-radius:3px;transition:width 1s ease}
+.latent-score{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;width:36px;text-align:right}
+.shap-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px}
+.shap-label{flex:1;color:#475569;font-size:11px}
+.shap-bar-wrap{width:80px;height:8px;background:#fee2e2;border-radius:4px;overflow:hidden;position:relative}
+.shap-bar-pos{height:100%;background:#10b981;border-radius:4px;position:absolute;left:0}
+.shap-bar-neg{height:100%;background:#ef4444;border-radius:4px;position:absolute;right:0}
+.shap-val{font-weight:600;font-size:11px;width:50px;text-align:right;color:#64748b}
+.econ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.econ-card{background:#f0fdfa;border:1px solid #a7f3d0;border-radius:10px;padding:.65rem;text-align:center}
+.econ-card .econ-label{font-size:10px;color:#0f766e;font-weight:600;text-transform:uppercase;margin-bottom:3px}
+.econ-card .econ-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#065f46}
+.spinner{width:40px;height:40px;border:3px solid rgba(13,148,136,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-center{text-align:center;padding:3rem;color:#64748b}
+.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start}
+.section-header{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:.6rem;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.tab-content{display:none}.tab-content.active{display:block}
+.app-list-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:6px;cursor:pointer;transition:all .15s;font-size:13px}
+.app-list-row:hover{border-color:var(--teal);background:#f0fdfa}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{max-height:none;border-right:none;border-bottom:1px solid var(--border)}.charts-row{grid-template-columns:1fr}.kv-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo">Alter<span>Score</span></div>
+  <div class="nav-right">
+    <span id="modelStatus" class="nav-badge">Checking…</span>
+    <a href="/docs" target="_blank" style="color:#64748b;font-size:12px;text-decoration:none">API Docs →</a>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="step-tabs">
+      <div class="step-tab active" onclick="setTab('profile')">Profile</div>
+      <div class="step-tab" onclick="setTab('consent')">Consent</div>
+      <div class="step-tab" onclick="setTab('data')">Data</div>
+      <div class="step-tab" onclick="setTab('psycho')">Psycho</div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="tab-content active" id="tab-profile">
+      <div class="section-header">Borrower Profile</div>
+      <div class="field"><label>Full Name</label><input id="f-name" value="Rajesh Kumar"/></div>
+      <div class="field-row">
+        <div class="field"><label>Occupation</label>
+          <select id="f-occ">
+            <option value="msme">MSME Owner</option>
+            <option value="gig">Gig Worker</option>
+            <option value="farmer">Farmer</option>
+            <option value="salaried" selected>Salaried</option>
+            <option value="daily_wage">Daily Wage</option>
+          </select>
+        </div>
+        <div class="field"><label>Monthly Income (₹)</label><input id="f-income" type="number" value="22000"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>State</label>
+          <select id="f-state">
+            <option>West Bengal</option><option>Bihar</option><option>Uttar Pradesh</option>
+            <option>Maharashtra</option><option>Tamil Nadu</option><option>Rajasthan</option>
+          </select>
+        </div>
+        <div class="field"><label>Loan Purpose</label>
+          <select id="f-purpose">
+            <option>Business Expansion</option><option>Working Capital</option>
+            <option>Agricultural Input</option><option>Education</option><option>Medical</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSENT TAB -->
+    <div class="tab-content" id="tab-consent">
+      <div class="section-header">Data Consent (DPDP Act 2023)</div>
+      <div id="consent-list"></div>
+      <div style="font-size:11px;color:#94a3b8;margin-top:.5rem">More consents = higher accuracy. Revoke anytime.</div>
+    </div>
+
+    <!-- DATA TAB -->
+    <div class="tab-content" id="tab-data">
+      <div class="section-header">Simulation Controls</div>
+      <div class="field"><label>Avg Days Late (Bills)</label><input id="d-days-late" type="number" value="2" min="0" max="90"/></div>
+      <div class="field"><label>Bill Suspensions (12m)</label><input id="d-suspensions" type="number" value="0" min="0" max="12"/></div>
+      <div class="field"><label>Home Stay % (GPS)</label><input id="d-home-stasis" type="number" value="75" min="10" max="100"/>
+      </div>
+      <div class="field"><label>Utility Spend % (Ecom)</label><input id="d-utility" type="number" value="65" min="0" max="100"/></div>
+      <div class="field"><label>Bank Inflow CV (0-1)</label><input id="d-inflow-cv" type="number" value="0.25" step="0.05" min="0" max="1"/></div>
+      <div class="field"><label>Min Monthly Balance (₹)</label><input id="d-mmb" type="number" value="2500"/></div>
+      <div class="field"><label>Merchant Avg Rating (1-5)</label><input id="d-rating" type="number" value="4.2" step="0.1" min="1" max="5"/></div>
+      <div class="field"><label>Review Count</label><input id="d-reviews" type="number" value="23" min="0"/></div>
+    </div>
+
+    <!-- PSYCHO TAB -->
+    <div class="tab-content" id="tab-psycho">
+      <div class="section-header">Psychometric Questionnaire (IRT)</div>
+      <div id="psycho-questions"></div>
+    </div>
+
+    <div style="margin-top:1rem">
+      <button class="btn btn-primary" onclick="runScoring()" style="width:100%;font-size:14px;padding:12px" id="scoreBtn">
+        ⚡ Run AlterScore
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN PANEL ─── -->
+  <main class="main" id="mainPanel">
+    <div id="welcomePanel">
+      <div class="card" style="text-align:center;padding:3rem 2rem;background:linear-gradient(135deg,#0f172a,#134e4a);color:#fff;border:none">
+        <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#99f6e4;margin-bottom:.5rem">AlterScore</div>
+        <div style="color:#94a3b8;margin-bottom:1.5rem;font-size:15px">AI-Driven Credit for 190M+ Credit-Invisible Indians</div>
+        <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap">
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">6</div><div style="font-size:11px;color:#64748b">Signal Sources</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">4</div><div style="font-size:11px;color:#64748b">Model Layers</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">5</div><div style="font-size:11px;color:#64748b">Latent Variables</div></div>
+          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">300-900</div><div style="font-size:11px;color:#64748b">Score Scale</div></div>
+        </div>
+        <div style="margin-top:1.5rem;font-size:12px;color:#475569">Fill in borrower data on the left and click <strong style="color:#5eead4">Run AlterScore</strong></div>
+      </div>
+      <div id="metricsPanel" style="display:none">
+        <div class="card">
+          <h2>Model Performance (Training Metrics)</h2>
+          <div id="metricsContent"></div>
+        </div>
+      </div>
+    </div>
+    <div id="loadingPanel" style="display:none">
+      <div class="loading-center"><div class="spinner"></div><div style="font-size:15px;font-weight:500">Running scoring pipeline…</div><div style="font-size:12px;margin-top:6px">Feature engineering → Latent variables → XGBoost → Decision engine</div></div>
+    </div>
+    <div id="resultPanel" style="display:none"></div>
+  </main>
+</div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const API = '/api/v1';
+
+// ──────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────
+let consentState = {
+  telco: true, geo: true, psycho: true, ecom: true, merchant: false, bank: false
+};
+let psychoAnswers = {};
+
+const CONSENTS = [
+  { key: 'telco', icon: '📱', label: 'Telecom Bill History', desc: 'Payment timing via AA' },
+  { key: 'geo', icon: '📍', label: 'Geolocation Stability', desc: 'Movement entropy & routine' },
+  { key: 'psycho', icon: '🧠', label: 'Psychometric Test', desc: 'IRT + consistency checks' },
+  { key: 'ecom', icon: '🛍', label: 'E-Commerce Behaviour', desc: 'Purchase category analysis' },
+  { key: 'merchant', icon: '🏪', label: 'Merchant Ratings', desc: 'Bayesian avg + sentiment' },
+  { key: 'bank', icon: '🏦', label: 'Bank Cash Flow', desc: 'CV of inflows via AA (optional)' },
+];
+
+const QUESTIONS = [
+  { id: 'q1', text: 'You receive early payment. What do you do?', opts: [{ l:'A',t:'Save most, spend only essentials',s:3},{l:'B',t:'Reinvest into business inventory',s:3},{l:'C',t:'Split: savings + small treat',s:2},{l:'D',t:'Spend freely — money flows',s:0}] },
+  { id: 'q2', text: 'How do you handle recurring bills?', opts: [{ l:'A',t:'Always on or before due date',s:3},{l:'B',t:'Usually on time, rarely late',s:2},{l:'C',t:'Often 1–2 weeks late',s:1},{l:'D',t:'Frequently miss due dates',s:0}] },
+  { id: 'q3', text: 'If you cannot repay a friend\'s loan this month?', opts: [{l:'A',t:'Inform early, agree revised plan',s:3},{l:'B',t:'Repay partially, explain',s:2},{l:'C',t:'Wait, hope next month is better',s:1},{l:'D',t:'Avoid the conversation',s:0}] },
+  { id: 'q4_trap', text: 'Think about your bills. How often do you pay them?', opts: [{l:'A',t:'Always on time without fail',s:3},{l:'B',t:'Mostly on time',s:2},{l:'C',t:'Sometimes late',s:1},{l:'D',t:'Rarely on time',s:0}] },
+  { id: 'q5', text: 'You receive ₹50,000 loan. How do you use it?', opts: [{l:'A',t:'Revenue-generating business assets',s:3},{l:'B',t:'Mix of business + personal needs',s:2},{l:'C',t:'Settle existing debts first',s:2},{l:'D',t:'Not sure — figure it out later',s:0}] },
+  { id: 'q6', text: 'How do you make major business purchases?', opts: [{l:'A',t:'Research, compare, wait for best deal',s:3},{l:'B',t:'Ask trusted peers or family',s:2},{l:'C',t:'Follow my gut feeling',s:1},{l:'D',t:'Buy immediately when needed',s:1}] },
+  { id: 'q7', text: 'Your business / income in 2 years?', opts: [{l:'A',t:'Significantly grown — I have a plan',s:3},{l:'B',t:'Stable and slightly improved',s:2},{l:'C',t:'About the same as now',s:1},{l:'D',t:'Hard to say — too unpredictable',s:0}] },
+];
+
+// ──────────────────────────────────────────────
+// CONSENT UI
+// ──────────────────────────────────────────────
+function renderConsents() {
+  const el = document.getElementById('consent-list');
+  if (!el) return;
+  el.innerHTML = CONSENTS.map(c => `
+    <div class="toggle-row ${consentState[c.key] ? 'on' : ''}" onclick="toggleConsent('${c.key}')">
+      <div class="toggle-row-left"><span>${c.icon}</span><div><div style="font-size:13px;font-weight:600;color:#0f172a">${c.label}</div><div style="font-size:11px;color:#94a3b8">${c.desc}</div></div></div>
+      <div class="toggle-switch"></div>
+    </div>
+  `).join('');
+}
+
+window.toggleConsent = (key) => {
+  consentState[key] = !consentState[key];
+  renderConsents();
+};
+
+// ──────────────────────────────────────────────
+// PSYCHO UI
+// ──────────────────────────────────────────────
+function renderPsychoQuestions() {
+  const el = document.getElementById('psycho-questions');
+  if (!el) return;
+  el.innerHTML = QUESTIONS.map(q => `
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:12px;font-weight:600;color:#0f172a;margin-bottom:5px">${q.text}</div>
+      ${q.opts.map(o => `
+        <div class="q-option ${psychoAnswers[q.id] === o.l ? 'sel' : ''}" onclick="selectAnswer('${q.id}','${o.l}')">
+          <span class="q-badge">${o.l}</span>${o.t}
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+window.selectAnswer = (qid, label) => {
+  psychoAnswers[qid] = label;
+  renderPsychoQuestions();
+};
+
+// ──────────────────────────────────────────────
+// TAB SWITCHING
+// ──────────────────────────────────────────────
+window.setTab = (name) => {
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    const names = ['profile','consent','data','psycho'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+};
+
+// ──────────────────────────────────────────────
+// SCORING
+// ──────────────────────────────────────────────
+window.runScoring = async () => {
+  const btn = document.getElementById('scoreBtn');
+  btn.disabled = true;
+  btn.textContent = 'Scoring…';
+  document.getElementById('welcomePanel').style.display = 'none';
+  document.getElementById('loadingPanel').style.display = 'block';
+  document.getElementById('resultPanel').style.display = 'none';
+
+  const daysLate = parseFloat(document.getElementById('d-days-late').value) || 2;
+  const suspensions = parseInt(document.getElementById('d-suspensions').value) || 0;
+  const homeStasis = (parseFloat(document.getElementById('d-home-stasis').value) || 75) / 100;
+  const utility = (parseFloat(document.getElementById('d-utility').value) || 65) / 100;
+  const inflowCV = parseFloat(document.getElementById('d-inflow-cv').value) || 0.25;
+  const mmb = parseFloat(document.getElementById('d-mmb').value) || 2500;
+  const rating = parseFloat(document.getElementById('d-rating').value) || 4.2;
+  const reviews = parseInt(document.getElementById('d-reviews').value) || 23;
+  const income = parseFloat(document.getElementById('f-income').value) || 22000;
+
+  const payload = {
+    borrower: {
+      name: document.getElementById('f-name').value || 'Borrower',
+      occupation: document.getElementById('f-occ').value,
+      monthly_income_inr: income,
+      state: document.getElementById('f-state').value,
+      loan_purpose: document.getElementById('f-purpose').value,
+    },
+    consent: { ...consentState, telco_consent: consentState.telco, geo_consent: consentState.geo, psycho_consent: consentState.psycho, ecom_consent: consentState.ecom, merchant_consent: consentState.merchant, bank_consent: consentState.bank },
+    telco: consentState.telco ? {
+      payments: Array.from({length: 6}, (_, i) => ({ days_late: Math.max(0, daysLate + (Math.random()-0.5)*2) })),
+      suspensions, recharge_intervals_days: [28,29,28,30,27,29], advance_recharge_ratio: 0.3,
+    } : null,
+    geo: consentState.geo ? {
+      has_data: true, home_stasis_pct: homeStasis, work_stasis_pct: 0.6,
+      location_entropy: 1.4, unique_locations_30d: 6, radius_of_gyration_km: 4.5,
+    } : null,
+    psychometrics: consentState.psycho ? {
+      answers: Object.keys(QUESTIONS.reduce((a, q) => ({...a, [q.id]: true}), {})).length > 0 ? psychoAnswers : { q1:'B',q2:'A',q3:'A',q4_trap:'A',q5:'A',q6:'A',q7:'A' },
+      avg_response_time_seconds: 12,
+    } : null,
+    ecommerce: consentState.ecom ? {
+      transactions: Array.from({length: 12}, (_, i) => ({
+        amount: 500 + Math.random() * 1000,
+        category: Math.random() < utility ? 'groceries' : 'electronics',
+        returned: Math.random() < 0.05, payment_method: 'online', day_index: i * 30,
+      }))
+    } : null,
+    merchant: consentState.merchant ? {
+      exists: true, avg_rating: rating, review_count: reviews,
+      positive_review_count: Math.floor(reviews * 0.75),
+      negative_review_count: Math.floor(reviews * 0.05),
+      closure_mentions: 0, rating_trend_6m: 0.1,
+    } : null,
+    bank: consentState.bank ? {
+      monthly_inflows: Array.from({length: 6}, () => income * (0.9 + Math.random() * 0.3)),
+      monthly_outflows: Array.from({length: 6}, () => income * (0.7 + Math.random() * 0.2)),
+      min_monthly_balance: mmb, avg_monthly_balance: mmb * 2.5, salary_regularity_flag: 1,
+    } : null,
+  };
+  // Fix consent keys for Pydantic
+  payload.consent = {
+    telco_consent: consentState.telco, geo_consent: consentState.geo,
+    psycho_consent: consentState.psycho, ecom_consent: consentState.ecom,
+    merchant_consent: consentState.merchant, bank_consent: consentState.bank,
+  };
+
+  try {
+    const res = await fetch(`${API}/score`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.detail || 'Scoring failed');
+    }
+    const data = await res.json();
+    renderResult(data);
+  } catch (e) {
+    document.getElementById('loadingPanel').style.display = 'none';
+    document.getElementById('resultPanel').style.display = 'block';
+    document.getElementById('resultPanel').innerHTML = `<div class="alert-warn">⚠️ ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Run AlterScore';
+  }
+};
+
+// ──────────────────────────────────────────────
+// RESULT RENDERING
+// ──────────────────────────────────────────────
+function renderResult(d) {
+  document.getElementById('loadingPanel').style.display = 'none';
+  const panel = document.getElementById('resultPanel');
+  panel.style.display = 'block';
+
+  const gradeMap = { Exceptional:'grade-good', 'Very Good':'grade-good', Good:'grade-good', Fair:'grade-fair', Poor:'grade-poor' };
+  const gradeColors = { Exceptional:'#4ade80', 'Very Good':'#4ade80', Good:'#60a5fa', Fair:'#fbbf24', Poor:'#f87171' };
+  const gradeBg = { Exceptional:'rgba(74,222,128,.15)', 'Very Good':'rgba(74,222,128,.15)', Good:'rgba(96,165,250,.15)', Fair:'rgba(251,191,36,.15)', Poor:'rgba(248,113,113,.15)' };
+  const gradeColor = gradeColors[d.tier_name] || '#60a5fa';
+  const gradeBgCol = gradeBg[d.tier_name] || 'rgba(96,165,250,.15)';
+
+  const latentDefs = [
+    { key:'BD', label:'Behavioral Discipline', icon:'🎯', color:'#6366f1' },
+    { key:'IS', label:'Income Stability', icon:'📈', color:'#10b981' },
+    { key:'RP', label:'Risk Preference', icon:'🎲', color:'#f59e0b' },
+    { key:'OR', label:'Operational Reliability', icon:'⚙️', color:'#ec4899' },
+    { key:'SC', label:'Structural Constraints', icon:'🌍', color:'#06b6d4' },
+  ];
+
+  const shapEntries = Object.entries(d.shap_values || {}).slice(0, 8);
+  const shapMax = Math.max(...shapEntries.map(([,v]) => Math.abs(v)), 0.01);
+
+  const prettyFeature = (k) => k.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 28);
+
+  panel.innerHTML = `
+    <!-- Score Hero -->
+    <div class="score-hero">
+      <div class="score-left">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:6px">YOUR ALTERSCORE</div>
+        <div class="big-score">${d.alter_score}<small>/900</small></div>
+        <div class="score-grade" style="background:${gradeBgCol};color:${gradeColor};border:1px solid ${gradeColor}33">${d.tier_name.toUpperCase()}</div>
+        <div class="decision-badge badge-${d.decision}">${d.decision}</div>
+        <p style="margin-top:8px;font-size:12px;color:#94a3b8">Confidence: ${(d.confidence * 100).toFixed(0)}% · Segment: ${d.segment.name}</p>
+        <p style="font-size:12px;color:#475569;margin-top:4px">PD: ${(d.pd_calibrated * 100).toFixed(1)}% · Risk Band: ${d.risk_band}</p>
+      </div>
+      <div id="radarWrap" style="width:180px;height:180px;position:relative">
+        <canvas id="radarChart" role="img" aria-label="Radar chart of latent variable scores"></canvas>
+      </div>
+    </div>
+
+    <!-- KV Cards -->
+    <div class="kv-grid">
+      <div class="kv-card"><div class="kv-label">Credit Limit</div><div class="kv-val">₹${(d.credit_limit_inr/1000).toFixed(0)}K</div></div>
+      <div class="kv-card"><div class="kv-label">Interest Rate</div><div class="kv-val">${d.interest_rate_pct}% p.a.</div></div>
+      <div class="kv-card"><div class="kv-label">Monitoring</div><div class="kv-val" style="font-size:.85rem">${d.monitoring_intensity}</div></div>
+      <div class="kv-card"><div class="kv-label">Exp. Revenue</div><div class="kv-val" style="color:#059669">₹${(d.economic_analysis.ev_revenue).toFixed(0)}</div></div>
+      <div class="kv-card"><div class="kv-label">Exp. Loss</div><div class="kv-val" style="color:#dc2626">₹${(d.economic_analysis.ev_loss).toFixed(0)}</div></div>
+      <div class="kv-card"><div class="kv-label">Exp. Profit</div><div class="kv-val" style="color:${d.economic_analysis.ev_profit>0?'#059669':'#dc2626'}">₹${(d.economic_analysis.ev_profit).toFixed(0)}</div></div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="charts-row">
+      <!-- Latent Variables -->
+      <div class="card">
+        <h3>Latent Variable Scores</h3>
+        ${latentDefs.map(l => {
+          const score = d.latent_scores[l.key] ?? 0;
+          const pct = Math.round(score * 100);
+          const color = score >= 0.7 ? '#10b981' : score >= 0.45 ? '#f59e0b' : '#ef4444';
+          return `<div class="latent-row">
+            <span class="latent-icon">${l.icon}</span>
+            <span class="latent-label">${l.label}</span>
+            <div class="latent-bar-wrap"><div class="latent-bar" style="width:${pct}%;background:${l.color}"></div></div>
+            <span class="latent-score" style="color:${color}">${pct}</span>
+          </div>`;
+        }).join('')}
+        <div style="font-size:10px;color:#94a3b8;margin-top:8px">BD=Behavioral Discipline · IS=Income Stability · RP=Risk Preference · OR=Operational Reliability · SC=Structural Constraints</div>
+      </div>
+
+      <!-- SHAP Values -->
+      <div class="card">
+        <h3>SHAP Feature Importance</h3>
+        <div style="font-size:10px;color:#94a3b8;margin-bottom:8px">Top predictors for this application (XGBoost)</div>
+        ${shapEntries.length > 0 ? shapEntries.map(([feat, val]) => {
+          const isPos = val > 0;
+          const width = Math.round((Math.abs(val) / shapMax) * 100);
+          return `<div class="shap-row">
+            <span class="shap-label">${prettyFeature(feat)}</span>
+            <div class="shap-bar-wrap">
+              ${isPos ? `<div class="shap-bar-pos" style="width:${width}%"></div>` : `<div class="shap-bar-neg" style="width:${width}%"></div>`}
+            </div>
+            <span class="shap-val" style="color:${isPos?'#10b981':'#ef4444'}">${isPos?'+':''}${val.toFixed(3)}</span>
+          </div>`;
+        }).join('') : '<div style="color:#94a3b8;font-size:12px">SHAP values unavailable (install shap package)</div>'}
+        <div id="barWrap" style="height:130px;position:relative;margin-top:.75rem">
+          <canvas id="barChart" role="img" aria-label="Bar chart of score components"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fairness -->
+    ${d.fairness_flags.low_data_coverage_flag ? `
+      <div class="alert-warn">⚠️ <span>${d.fairness_flags.recommendation} (Coverage: ${(d.fairness_flags.data_coverage_ratio*100).toFixed(0)}% — ${d.fairness_flags.signals_available}/${d.fairness_flags.signals_total} signals)</span></div>
+    ` : `
+      <div style="background:#f0fdfa;border:1px solid #a7f3d0;color:#065f46;padding:9px 14px;border-radius:8px;font-size:12px;margin-bottom:1rem;display:flex;gap:8px">
+        ✓ <span>${d.fairness_flags.recommendation} (${d.fairness_flags.signals_available}/${d.fairness_flags.signals_total} signals active)</span>
+      </div>
+    `}
+
+    <!-- Application ID -->
+    <div style="font-size:11px;color:#94a3b8;text-align:right">Application ID: ${d.application_id || 'N/A'}</div>
+  `;
+
+  // Draw radar chart
+  setTimeout(() => {
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: latentDefs.map(l => l.key),
+        datasets: [{
+          data: latentDefs.map(l => Math.round((d.latent_scores[l.key] ?? 0) * 100)),
+          backgroundColor: 'rgba(13,148,136,.15)',
+          borderColor: '#0d9488', borderWidth: 2,
+          pointBackgroundColor: '#0d9488', pointRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(255,255,255,.1)' }, angleLines: { color: 'rgba(255,255,255,.1)' }, pointLabels: { color: '#94a3b8', font: { size: 10 } } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Bar chart for latent scores
+    const bCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(bCtx, {
+      type: 'bar',
+      data: {
+        labels: latentDefs.map(l => l.key),
+        datasets: [{
+          data: latentDefs.map(l => Math.round((d.latent_scores[l.key] ?? 0) * 100)),
+          backgroundColor: latentDefs.map(l => l.color + 'cc'),
+          borderColor: latentDefs.map(l => l.color),
+          borderWidth: 1.5, borderRadius: 5,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { min: 0, max: 100, ticks: { font: { size: 9 }, color: '#94a3b8' }, grid: { color: '#f1f5f9' } }, x: { ticks: { font: { size: 9 }, color: '#475569' }, grid: { display: false } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }, 100);
+}
+
+// ──────────────────────────────────────────────
+// HEALTH CHECK + METRICS
+// ──────────────────────────────────────────────
+async function checkHealth() {
+  try {
+    const res = await fetch(`${API}/health`);
+    const data = await res.json();
+    const badge = document.getElementById('modelStatus');
+    badge.textContent = data.model_loaded ? '✓ Model Ready' : '⚠ Model Loading';
+    badge.style.background = data.model_loaded ? 'rgba(13,148,136,.2)' : 'rgba(217,119,6,.2)';
+    badge.style.color = data.model_loaded ? '#5eead4' : '#fbbf24';
+
+    if (data.model_loaded) loadMetrics();
+  } catch {
+    document.getElementById('modelStatus').textContent = '⚠ API Offline';
+  }
+}
+
+async function loadMetrics() {
+  try {
+    const res = await fetch(`${API}/metrics`);
+    if (!res.ok) return;
+    const m = await res.json();
+    const el = document.getElementById('metricsContent');
+    if (!el) return;
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:.5rem">
+        ${[
+          { label:'AUC (Calibrated XGB)', val: m.calibrated_xgboost?.auc?.toFixed(3) },
+          { label:'KS Statistic', val: m.calibrated_xgboost?.ks?.toFixed(3) },
+          { label:'Brier Score', val: m.calibrated_xgboost?.brier?.toFixed(3) },
+          { label:'Gini', val: m.calibrated_xgboost?.gini?.toFixed(3) },
+        ].map(x => `<div class="kv-card"><div class="kv-label">${x.label}</div><div class="kv-val">${x.val || 'N/A'}</div></div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+        ${[
+          { label:'Approval Rate', val: m.business?.approval_rate ? (m.business.approval_rate*100).toFixed(1)+'%' : 'N/A' },
+          { label:'Thin-file Inclusion', val: m.business?.thin_file_inclusion_rate ? (m.business.thin_file_inclusion_rate*100).toFixed(1)+'%' : 'N/A' },
+        ].map(x => `<div class="kv-card"><div class="kv-label">${x.label}</div><div class="kv-val">${x.val}</div></div>`).join('')}
+      </div>
+    `;
+    document.getElementById('metricsPanel').style.display = 'block';
+  } catch {}
+}
+
+// Init
+renderConsents();
+renderPsychoQuestions();
+checkHealth();
+setInterval(checkHealth, 30000);
+</script>
+</body>
+</html>
