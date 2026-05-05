@@ -4,116 +4,236 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AlterScore — AI Credit Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-:root{--teal:#0d9488;--teal-dark:#0f766e;--teal-light:#ccfbf1;--indigo:#4f46e5;--slate:#475569;--bg:#f1f5f9;--surface:#fff;--border:#e2e8f0;--shadow:0 4px 24px rgba(15,23,42,.07)}
+:root{
+  --primary:#0d9488;
+  --primary-dark:#0f766e;
+  --success:#16a34a;
+  --risk:#ef4444;
+  --warning:#f59e0b;
+  --bg:#f3f4f6;
+  --surface:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --muted-2:#94a3b8;
+  --border:#e2e8f0;
+  --grid:#e2e8f0;
+  --shadow:0 4px 20px rgba(15,23,42,.08);
+  --shadow-hover:0 8px 28px rgba(15,23,42,.12);
+  --radius:16px;
+  --radius-sm:12px;
+  --radius-xs:10px;
+  --space-1:8px;
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:24px;
+  --space-5:32px;
+  --grad-hero:linear-gradient(135deg,#0f172a 0%,#0d9488 100%);
+}
+
+body[data-theme='dark']{
+  --bg:#0b1220;
+  --surface:#111827;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --muted-2:#64748b;
+  --border:#1f2937;
+  --grid:#1f2937;
+  --shadow:0 4px 20px rgba(2,6,23,.6);
+  --shadow-hover:0 10px 32px rgba(2,6,23,.75);
+  --grad-hero:linear-gradient(135deg,#0b1220 0%,#0d9488 100%);
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#0f172a;min-height:100vh}
-.navbar{background:#0f172a;padding:0 2rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#99f6e4;letter-spacing:-.5px}
-.logo span{color:#818cf8}
-.nav-right{display:flex;align-items:center;gap:12px;font-size:12px;color:#64748b}
-.nav-badge{background:rgba(13,148,136,.2);border:1px solid rgba(13,148,136,.4);color:#5eead4;padding:3px 10px;border-radius:20px;font-weight:600}
-.layout{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 58px)}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 58px)}
-.main{padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 58px)}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
-h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.75rem;color:#0f172a}
-h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:600;color:#0f172a;margin-bottom:.5rem}
-label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
-input,select,textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:#0f172a;background:#fff;outline:none;transition:border-color .2s}
-input:focus,select:focus{border-color:var(--teal)}
-.field{margin-bottom:.75rem}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
-.btn-primary{background:var(--teal-dark);color:#fff}
-.btn-primary:hover{background:var(--teal)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-ghost{background:transparent;color:var(--slate);border:1.5px solid var(--border)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal-dark)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s}
-.toggle-row.on{border-color:var(--teal);background:#f0fdfa}
-.toggle-row-left{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#334155}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);
+  color:var(--text);
+  min-height:100vh;
+}
+body[data-theme='dark']{background:linear-gradient(180deg,#0b1220 0%,#0f172a 100%)}
+
+.navbar{
+  background:#0b1220;
+  padding:0 var(--space-5);
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid rgba(148,163,184,.1);
+}
+.logo{font-weight:800;font-size:1.35rem;color:#99f6e4;letter-spacing:-.6px}
+.logo span{color:#60a5fa}
+.nav-right{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.nav-badge{background:rgba(13,148,136,.2);border:1px solid rgba(13,148,136,.4);color:#5eead4;padding:4px 10px;border-radius:999px;font-weight:600}
+.nav-link{color:var(--muted);font-size:12px;text-decoration:none}
+.nav-link:hover{color:#e2e8f0}
+.theme-toggle{
+  border:1px solid rgba(148,163,184,.2);
+  background:rgba(15,23,42,.4);
+  color:#e2e8f0;
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.theme-toggle:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
+.theme-toggle .icon-sun{display:none}
+body[data-theme='dark'] .theme-toggle .icon-sun{display:block}
+body[data-theme='dark'] .theme-toggle .icon-moon{display:none}
+
+.layout{display:grid;grid-template-columns:340px 1fr;gap:var(--space-3);min-height:calc(100vh - 62px);padding:var(--space-3)}
+.sidebar{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:var(--space-4);
+  overflow-y:auto;
+  max-height:calc(100vh - 62px - var(--space-3));
+  box-shadow:var(--shadow);
+}
+.main{padding:0;overflow-y:auto;max-height:calc(100vh - 62px - var(--space-3))}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:var(--space-4);
+  margin-bottom:var(--space-3);
+  box-shadow:var(--shadow);
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.hero-card{border:none;background:var(--grad-hero);color:#fff}
+h2{font-size:1.15rem;font-weight:700;margin-bottom:.85rem;color:var(--text)}
+h3{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:.6rem;display:flex;align-items:center;gap:8px}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+input,select,textarea{
+  width:100%;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-xs);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:14px;
+  color:var(--text);
+  background:var(--surface);
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+input:invalid,select:invalid{border-color:rgba(239,68,68,.6)}
+.field{margin-bottom:var(--space-3)}
+.field-help{font-size:11px;color:var(--muted-2);margin-top:6px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-bottom:var(--space-3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:var(--radius-xs);border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed}
+.btn-primary.loading{opacity:.85}
+.btn-primary .btn-spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+.btn-primary.loading .btn-spinner{display:inline-block}
+.btn-primary.loading .btn-label{opacity:.85}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary-dark)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-xs);margin-bottom:8px;cursor:pointer;transition:all .2s}
+.toggle-row.on{border-color:var(--primary);background:rgba(13,148,136,.08)}
+.toggle-row-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--text)}
 .toggle-switch{width:34px;height:18px;border-radius:9px;background:var(--border);position:relative;flex-shrink:0;transition:background .2s}
 .toggle-switch::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.on .toggle-switch{background:var(--teal-dark)}
+.on .toggle-switch{background:var(--primary-dark)}
 .on .toggle-switch::after{transform:translateX(16px)}
-.q-option{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:5px;cursor:pointer;font-size:13px;color:#334155;transition:all .15s;display:flex;align-items:center;gap:8px}
-.q-option:hover{border-color:var(--teal);background:#f0fdfa}
-.q-option.sel{border-color:var(--teal-dark);background:#f0fdfa;color:var(--teal-dark);font-weight:500}
-.q-badge{width:20px;height:20px;border-radius:5px;background:#f1f5f9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#94a3b8;flex-shrink:0}
-.sel .q-badge{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
-.step-tabs{display:flex;gap:4px;margin-bottom:1.25rem;background:#f1f5f9;border-radius:10px;padding:3px}
-.step-tab{flex:1;padding:7px;text-align:center;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;color:#64748b;transition:all .15s}
-.step-tab.active{background:var(--surface);color:var(--teal-dark);box-shadow:var(--shadow)}
-.score-hero{background:linear-gradient(135deg,#0f172a 0%,#134e4a 100%);border-radius:16px;padding:2rem;display:grid;grid-template-columns:1fr 240px;gap:1.5rem;align-items:center;margin-bottom:1rem}
+.q-option{padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-xs);margin-bottom:6px;cursor:pointer;font-size:13px;color:var(--text);transition:all .2s;display:flex;align-items:center;gap:8px}
+.q-option:hover{border-color:var(--primary);background:rgba(13,148,136,.06)}
+.q-option.sel{border-color:var(--primary-dark);background:rgba(13,148,136,.1);color:var(--primary-dark);font-weight:600}
+.q-badge{width:20px;height:20px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted-2);flex-shrink:0}
+.sel .q-badge{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+.step-tabs{display:flex;gap:6px;margin-bottom:var(--space-4);background:var(--bg);border-radius:12px;padding:4px}
+.step-tab{flex:1;padding:8px;text-align:center;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s}
+.step-tab.active{background:var(--surface);color:var(--primary-dark);box-shadow:var(--shadow)}
+.score-hero{background:var(--grad-hero);border-radius:var(--radius);padding:var(--space-5);display:grid;grid-template-columns:1fr 240px;gap:var(--space-4);align-items:center;margin-bottom:var(--space-3);box-shadow:var(--shadow)}
 .score-stack{display:flex;flex-direction:column;gap:10px}
-.big-score{font-family:'Syne',sans-serif;font-size:4.6rem;font-weight:800;color:#fff;line-height:.95}
-.big-score small{font-size:1.4rem;color:#64748b}
-.score-subline{font-size:12px;color:#94a3b8}
-.decision-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.pill-approved{background:rgba(22,163,74,.18);color:#4ade80;border:1px solid rgba(74,222,128,.35)}
-.pill-review{background:rgba(217,119,6,.18);color:#fbbf24;border:1px solid rgba(251,191,36,.35)}
-.pill-reject{background:rgba(220,38,38,.18);color:#f87171;border:1px solid rgba(248,113,113,.35)}
-.risk-mini{display:flex;flex-direction:column;gap:8px;background:rgba(15,23,42,.55);border:1px solid rgba(148,163,184,.2);padding:12px;border-radius:12px;color:#e2e8f0}
-.risk-mini .label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8}
-.risk-mini .value{font-family:'Syne',sans-serif;font-size:1rem;color:#f8fafc}
-.kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
-.kv-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
-.kv-card{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.75rem;text-align:center}
-.kv-card .kv-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
-.kv-card .kv-val{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#0f172a}
-.charts-row{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;margin-bottom:1rem}
-.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
-.result-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
-.muted{color:#94a3b8;font-size:11px}
-.hint{font-size:10px;color:#94a3b8}
+.big-score{font-size:clamp(3.5rem,6vw,5rem);font-weight:800;color:#fff;line-height:.95}
+.big-score small{font-size:1.2rem;color:rgba(226,232,240,.8)}
+.score-subline{font-size:13px;color:rgba(226,232,240,.75)}
+.decision-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:none}
+.pill-approved{background:rgba(22,163,74,.2);color:#bbf7d0;border:1px solid rgba(22,163,74,.3)}
+.pill-review{background:rgba(245,158,11,.2);color:#fde68a;border:1px solid rgba(245,158,11,.3)}
+.pill-reject{background:rgba(239,68,68,.2);color:#fecaca;border:1px solid rgba(239,68,68,.3)}
+.risk-mini{display:flex;flex-direction:column;gap:10px;background:rgba(15,23,42,.55);border:1px solid rgba(148,163,184,.2);padding:14px;border-radius:var(--radius-sm);color:#e2e8f0}
+.risk-mini .label{font-size:11px;letter-spacing:.08em;color:rgba(226,232,240,.65)}
+.risk-mini .value{font-size:1rem;font-weight:700;color:#f8fafc}
+.kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin-bottom:var(--space-3)}
+.kv-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem;text-align:center}
+.kv-card .kv-label{font-size:10px;font-weight:600;letter-spacing:.04em;color:var(--muted-2);margin-bottom:4px}
+.kv-card .kv-val{font-size:1.1rem;font-weight:800;color:var(--text)}
+.charts-row{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--space-3);margin-bottom:var(--space-3)}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3);margin-bottom:var(--space-3)}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-3);box-shadow:var(--shadow)}
+.muted{color:var(--muted-2);font-size:12px}
+.hint{font-size:11px;color:var(--muted-2)}
 .pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.pill{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#f8fafc;color:#475569}
+.pill{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--muted)}
 .pos{color:#059669}
 .neg{color:#dc2626}
-.lat-chart-wrap{height:220px;position:relative}
-.latent-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
-.latent-row:last-child{border-bottom:none}
-.latent-icon{width:26px;text-align:center;font-size:15px}
-.latent-label{width:120px;font-weight:500;color:#334155}
-.latent-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.latent-bar{height:100%;border-radius:3px;transition:width 1s ease}
-.latent-score{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;width:36px;text-align:right}
+.lat-chart-wrap{height:240px;position:relative}
+.shap-chart-wrap{height:240px;position:relative}
 .shap-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px}
-.shap-label{flex:1;color:#475569;font-size:11px}
-.shap-bar-wrap{width:80px;height:8px;background:#fee2e2;border-radius:4px;overflow:hidden;position:relative}
-.shap-bar-pos{height:100%;background:#10b981;border-radius:4px;position:absolute;left:0}
-.shap-bar-neg{height:100%;background:#ef4444;border-radius:4px;position:absolute;right:0}
-.shap-val{font-weight:600;font-size:11px;width:50px;text-align:right;color:#64748b}
-.econ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.econ-card{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.65rem;text-align:center}
-.econ-card .econ-label{font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;margin-bottom:3px}
-.econ-card .econ-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800}
+.shap-label{flex:1;color:var(--muted);font-size:11px}
+.shap-val{font-weight:600;font-size:11px;width:60px;text-align:right;color:var(--muted)}
+.econ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2)}
+.econ-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem;text-align:center}
+.econ-card .econ-label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-bottom:3px;display:flex;align-items:center;justify-content:center;gap:6px}
+.econ-card .econ-val{font-size:1rem;font-weight:800}
 .econ-positive{color:#059669}
 .econ-negative{color:#dc2626}
-.econ-formula{font-size:10px;color:#94a3b8;margin-top:6px;text-align:center}
-.whatif-row{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center;margin-bottom:8px}
+.econ-formula{font-size:11px;color:var(--muted-2);margin-top:6px;text-align:center}
+.whatif-row{display:grid;grid-template-columns:1fr 72px;gap:var(--space-2);align-items:center;margin-bottom:10px}
 .whatif-row input[type='range']{width:100%}
-.whatif-val{font-size:12px;font-weight:600;color:#0f172a;text-align:right}
-.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem}
-.preset-btn{background:#f8fafc;border:1.5px solid var(--border);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s}
-.preset-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
+.whatif-val{font-size:12px;font-weight:600;color:var(--text);text-align:right}
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--space-2)}
+.preset-btn{background:var(--bg);border:1.5px solid var(--border);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s}
+.preset-btn:hover{border-color:var(--primary);color:var(--primary-dark)}
 .req{color:#ef4444;margin-left:4px}
-.tooltip{border-bottom:1px dotted #94a3b8;cursor:help}
-.spinner{width:40px;height:40px;border:3px solid rgba(13,148,136,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+.tooltip{border-bottom:1px dotted var(--muted-2);cursor:help}
+.spinner{width:40px;height:40px;border:3px solid rgba(13,148,136,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto var(--space-3)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-center{text-align:center;padding:3rem;color:#64748b}
-.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start}
-.section-header{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:.6rem;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.loading-center{text-align:center;padding:3rem;color:var(--muted)}
+.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:10px 14px;border-radius:var(--radius-xs);font-size:12px;margin-bottom:var(--space-3);display:flex;gap:8px;align-items:flex-start}
+.section-header{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--muted-2);margin-bottom:.6rem;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .tab-content{display:none}.tab-content.active{display:block}
-.app-list-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:6px;cursor:pointer;transition:all .15s;font-size:13px}
-.app-list-row:hover{border-color:var(--teal);background:#f0fdfa}
-@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{max-height:none;border-right:none;border-bottom:1px solid var(--border)}.charts-row{grid-template-columns:1fr}.kv-grid{grid-template-columns:1fr 1fr}.result-grid{grid-template-columns:1fr}.score-hero{grid-template-columns:1fr}}
+.app-list-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:13px}
+.app-list-row:hover{border-color:var(--primary);background:rgba(13,148,136,.06)}
+.fade-in{animation:fadeInUp .45s ease var(--delay,0s) both}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.icon-sm{width:16px;height:16px}
+
+@media(max-width:1024px){
+  .layout{grid-template-columns:300px 1fr}
+  .score-hero{grid-template-columns:1fr 200px}
+  .result-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr;padding:var(--space-2)}
+  .sidebar{max-height:none}
+  .charts-row{grid-template-columns:1fr}
+  .kv-grid{grid-template-columns:1fr 1fr}
+  .result-grid{grid-template-columns:1fr}
+  .score-hero{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -121,7 +241,11 @@ input:focus,select:focus{border-color:var(--teal)}
   <div class="logo">Alter<span>Score</span></div>
   <div class="nav-right">
     <span id="modelStatus" class="nav-badge">Checking…</span>
-    <a href="/docs" target="_blank" style="color:#64748b;font-size:12px;text-decoration:none">API Docs →</a>
+    <a href="/docs" target="_blank" class="nav-link">API Docs →</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i data-lucide="moon" class="icon-sm icon-moon"></i>
+      <i data-lucide="sun" class="icon-sm icon-sun"></i>
+    </button>
   </div>
 </nav>
 
@@ -146,9 +270,9 @@ input:focus,select:focus{border-color:var(--teal)}
       <div class="hint" style="margin-bottom:1rem">Presets update inputs, consents, and psychometric answers.</div>
 
       <div class="section-header">Personal Info</div>
-      <div class="field"><label>Full Name<span class="req">*</span></label><input id="f-name" value="Rajesh Kumar"/></div>
+      <div class="field"><label>Full Name<span class="req">*</span></label><input id="f-name" value="Rajesh Kumar" required minlength="2"/></div>
       <div class="field"><label>State<span class="req">*</span></label>
-        <select id="f-state">
+        <select id="f-state" required>
           <option>West Bengal</option><option>Bihar</option><option>Uttar Pradesh</option>
           <option>Maharashtra</option><option>Tamil Nadu</option><option>Rajasthan</option>
         </select>
@@ -156,7 +280,7 @@ input:focus,select:focus{border-color:var(--teal)}
 
       <div class="section-header">Financial Info</div>
       <div class="field"><label>Occupation<span class="req">*</span></label>
-        <select id="f-occ">
+        <select id="f-occ" required>
           <option value="msme">MSME Owner</option>
           <option value="gig">Gig Worker</option>
           <option value="farmer">Farmer</option>
@@ -164,13 +288,13 @@ input:focus,select:focus{border-color:var(--teal)}
           <option value="daily_wage">Daily Wage</option>
         </select>
       </div>
-      <div class="field"><label>Monthly Income (₹)<span class="req">*</span></label><input id="f-income" type="number" value="22000" min="5000" max="200000"/>
-        <div class="hint">Typical range: ₹5k–₹200k</div>
+      <div class="field"><label>Monthly Income (₹)<span class="req">*</span></label><input id="f-income" type="number" value="22000" min="5000" max="200000" required/>
+        <div class="field-help">Typical range: ₹5k–₹200k</div>
       </div>
 
       <div class="section-header">Loan Details</div>
       <div class="field"><label>Loan Purpose<span class="req">*</span></label>
-        <select id="f-purpose">
+        <select id="f-purpose" required>
           <option>Business Expansion</option><option>Working Capital</option>
           <option>Agricultural Input</option><option>Education</option><option>Medical</option>
         </select>
@@ -229,8 +353,9 @@ input:focus,select:focus{border-color:var(--teal)}
     </div>
 
     <div style="margin-top:1rem">
-      <button class="btn btn-primary" onclick="runScoring()" style="width:100%;font-size:14px;padding:12px" id="scoreBtn">
-        ⚡ Run AlterScore
+      <button class="btn btn-primary" onclick="runScoring()" style="width:100%;font-size:15px;padding:14px" id="scoreBtn">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Run AlterScore</span>
       </button>
     </div>
   </aside>
@@ -238,16 +363,16 @@ input:focus,select:focus{border-color:var(--teal)}
   <!-- ─── MAIN PANEL ─── -->
   <main class="main" id="mainPanel">
     <div id="welcomePanel">
-      <div class="card" style="text-align:center;padding:3rem 2rem;background:linear-gradient(135deg,#0f172a,#134e4a);color:#fff;border:none">
-        <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#99f6e4;margin-bottom:.5rem">AlterScore</div>
-        <div style="color:#94a3b8;margin-bottom:1.5rem;font-size:15px">AI-Driven Credit for 190M+ Credit-Invisible Indians</div>
+      <div class="card hero-card" style="text-align:center;padding:3rem 2rem">
+        <div style="font-size:2rem;font-weight:800;color:#99f6e4;margin-bottom:.5rem">AlterScore</div>
+        <div style="color:rgba(226,232,240,.8);margin-bottom:1.5rem;font-size:15px">AI-driven credit for 190M+ credit-invisible Indians</div>
         <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap">
-          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">6</div><div style="font-size:11px;color:#64748b">Signal Sources</div></div>
-          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">4</div><div style="font-size:11px;color:#64748b">Model Layers</div></div>
-          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">5</div><div style="font-size:11px;color:#64748b">Latent Variables</div></div>
-          <div style="text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#5eead4">300-900</div><div style="font-size:11px;color:#64748b">Score Scale</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:800;color:#5eead4">6</div><div style="font-size:11px;color:rgba(226,232,240,.7)">Signal Sources</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:800;color:#5eead4">4</div><div style="font-size:11px;color:rgba(226,232,240,.7)">Model Layers</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:800;color:#5eead4">5</div><div style="font-size:11px;color:rgba(226,232,240,.7)">Latent Variables</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:800;color:#5eead4">300-900</div><div style="font-size:11px;color:rgba(226,232,240,.7)">Score Scale</div></div>
         </div>
-        <div style="margin-top:1.5rem;font-size:12px;color:#475569">Fill in borrower data on the left and click <strong style="color:#5eead4">Run AlterScore</strong></div>
+        <div style="margin-top:1.5rem;font-size:12px;color:rgba(226,232,240,.7)">Fill in borrower data on the left and click <strong style="color:#5eead4">Run AlterScore</strong></div>
       </div>
       <div id="metricsPanel" style="display:none">
         <div class="card">
@@ -266,6 +391,35 @@ input:focus,select:focus{border-color:var(--teal)}
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 const API = '/api/v1';
+let latentChartInstance = null;
+let shapChartInstance = null;
+let lastResult = null;
+
+function getThemeColors() {
+  const styles = getComputedStyle(document.body);
+  return {
+    text: styles.getPropertyValue('--text').trim() || '#0f172a',
+    muted: styles.getPropertyValue('--muted').trim() || '#64748b',
+    muted2: styles.getPropertyValue('--muted-2').trim() || '#94a3b8',
+    grid: styles.getPropertyValue('--grid').trim() || '#e2e8f0',
+  };
+}
+
+function updateChartTheme() {
+  const { text, muted, grid } = getThemeColors();
+  if (latentChartInstance) {
+    latentChartInstance.options.scales.x.ticks.color = muted;
+    latentChartInstance.options.scales.x.grid.color = grid;
+    latentChartInstance.options.scales.y.ticks.color = text;
+    latentChartInstance.update();
+  }
+  if (shapChartInstance) {
+    shapChartInstance.options.scales.x.ticks.color = muted;
+    shapChartInstance.options.scales.x.grid.color = grid;
+    shapChartInstance.options.scales.y.ticks.color = text;
+    shapChartInstance.update();
+  }
+}
 
 // ──────────────────────────────────────────────
 // STATE
@@ -512,7 +666,8 @@ window.runScoring = async ({ mode = 'full' } = {}) => {
 
   if (isFull) {
     btn.disabled = true;
-    btn.textContent = 'Scoring…';
+    btn.classList.add('loading');
+    btn.querySelector('.btn-label').textContent = 'Scoring…';
     document.getElementById('welcomePanel').style.display = 'none';
     document.getElementById('loadingPanel').style.display = 'block';
     document.getElementById('resultPanel').style.display = 'none';
@@ -534,7 +689,8 @@ window.runScoring = async ({ mode = 'full' } = {}) => {
   } finally {
     if (isFull) {
       btn.disabled = false;
-      btn.textContent = '⚡ Run AlterScore';
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-label').textContent = 'Run AlterScore';
     }
     if (!isFull) {
       const status = document.getElementById('whatif-status');
@@ -575,15 +731,16 @@ function renderResult(d, { mode = 'full' } = {}) {
     { key:'SC', label:'Social Capital', icon:'🤝', color:'#06b6d4' },
   ];
 
-  const decisionText = ['APPROVED','REVIEW','REJECT'].includes(d.decision) ? d.decision : (d.decision === 'CONDITIONAL' ? 'REVIEW' : 'REVIEW');
-  const decisionClass = decisionText === 'APPROVED' ? 'pill-approved' : decisionText === 'REJECT' ? 'pill-reject' : 'pill-review';
+  const decisionKey = ['APPROVED','REVIEW','REJECT'].includes(d.decision) ? d.decision : (d.decision === 'CONDITIONAL' ? 'REVIEW' : 'REVIEW');
+  const decisionLabel = decisionKey === 'APPROVED' ? 'Approved' : decisionKey === 'REJECT' ? 'Rejected' : 'Review';
+  const decisionClass = decisionKey === 'APPROVED' ? 'pill-approved' : decisionKey === 'REJECT' ? 'pill-reject' : 'pill-review';
+  const decisionIcon = decisionKey === 'APPROVED' ? 'check-circle' : decisionKey === 'REJECT' ? 'x-circle' : 'alert-triangle';
   const percentile = Math.max(1, Math.min(99, Math.round(((d.alter_score - 300) / 600) * 100)));
 
   const prettyFeature = (k) => k.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 28);
 
   const shapValues = d.shap_values || {};
   const shapEntries = Object.entries(shapValues);
-  const shapMax = Math.max(...shapEntries.map(([,v]) => Math.abs(v)), 0.01);
 
   const groupForFeature = (name) => {
     const n = name.toLowerCase();
@@ -608,18 +765,18 @@ function renderResult(d, { mode = 'full' } = {}) {
 
   panel.innerHTML = `
     <!-- Score Hero -->
-    <div class="score-hero">
+    <div class="score-hero fade-in" style="--delay:0s">
       <div class="score-stack">
-        <div class="score-subline">YOUR ALTERSCORE</div>
+        <div class="score-subline">Your AlterScore</div>
         <div class="big-score"><span id="scoreValue">${d.alter_score}</span><small>/900</small></div>
-        <div class="decision-pill ${decisionClass}">${decisionText} · Risk Band ${d.risk_band}</div>
-        <div class="score-subline"><span class="tooltip" title="Probability of default">Default Risk</span>: ${(d.pd_calibrated * 100).toFixed(1)}% · Confidence: ${(d.confidence * 100).toFixed(0)}% · Segment: ${d.segment.name}</div>
+        <div class="decision-pill ${decisionClass}"><i data-lucide="${decisionIcon}" class="icon-sm"></i>${decisionLabel} · Risk Band ${d.risk_band}</div>
+        <div class="score-subline"><span class="tooltip" title="Probability of default">Default risk</span>: ${(d.pd_calibrated * 100).toFixed(1)}% · Confidence: ${(d.confidence * 100).toFixed(0)}% · Segment: ${d.segment.name}</div>
         <div class="score-subline">Better than ${percentile}% of applicants · Typical approval score: 650+</div>
       </div>
       <div class="risk-mini">
         <div>
           <div class="label">Decision</div>
-          <div class="value">${decisionText}</div>
+          <div class="value">${decisionLabel}</div>
         </div>
         <div>
           <div class="label">Tier</div>
@@ -637,8 +794,8 @@ function renderResult(d, { mode = 'full' } = {}) {
     </div>
 
     <div class="result-grid">
-      <div class="result-card">
-        <h3>Risk Details</h3>
+      <div class="result-card fade-in" style="--delay:.05s">
+        <h3><i data-lucide="shield-alert" class="icon-sm"></i>Risk Details</h3>
         <div class="pill-row">
           <span class="pill"><span class="tooltip" title="Probability of default">Default Risk</span>: ${(d.pd_calibrated * 100).toFixed(1)}%</span>
           <span class="pill">Confidence: ${(d.confidence * 100).toFixed(0)}%</span>
@@ -649,27 +806,27 @@ function renderResult(d, { mode = 'full' } = {}) {
         <div class="muted" style="margin-top:8px">Decision context based on model confidence and banding.</div>
       </div>
 
-      <div class="result-card">
-        <h3>Economics</h3>
+      <div class="result-card fade-in" style="--delay:.1s">
+        <h3><i data-lucide="wallet" class="icon-sm"></i>Economics</h3>
         <div class="econ-grid">
           <div class="econ-card">
-            <div class="econ-label">Expected Profit (per loan)</div>
+            <div class="econ-label"><i data-lucide="trending-up" class="icon-sm"></i>Expected Profit</div>
             <div class="econ-val ${d.economic_analysis.ev_profit > 0 ? 'econ-positive' : 'econ-negative'}">₹${(d.economic_analysis.ev_profit).toFixed(0)}</div>
           </div>
           <div class="econ-card">
-            <div class="econ-label">Expected Loss</div>
+            <div class="econ-label"><i data-lucide="trending-down" class="icon-sm"></i>Expected Loss</div>
             <div class="econ-val econ-negative">₹${(d.economic_analysis.ev_loss).toFixed(0)}</div>
           </div>
           <div class="econ-card">
-            <div class="econ-label">Expected Revenue</div>
+            <div class="econ-label"><i data-lucide="banknote" class="icon-sm"></i>Expected Revenue</div>
             <div class="econ-val econ-positive">₹${(d.economic_analysis.ev_revenue).toFixed(0)}</div>
           </div>
         </div>
         <div class="econ-formula">Profit = Revenue − Loss</div>
       </div>
 
-      <div class="result-card">
-        <h3>Why This Decision?</h3>
+      <div class="result-card fade-in" style="--delay:.15s">
+        <h3><i data-lucide="badge-check" class="icon-sm"></i>Why This Decision?</h3>
         <div class="pill-row">
           ${posFeatures.slice(0,2).map(([feat]) => `<span class="pill pos">+ ${prettyFeature(feat)}</span>`).join('')}
           ${negFeatures.slice(0,2).map(([feat]) => `<span class="pill neg">- ${prettyFeature(feat)}</span>`).join('')}
@@ -679,7 +836,7 @@ function renderResult(d, { mode = 'full' } = {}) {
     </div>
 
     <div class="charts-row">
-      <div class="card">
+      <div class="card fade-in" style="--delay:.2s">
         <h3><span class="tooltip" title="Latent variables are model-derived factors">Latent Variable Scores</span></h3>
         <div class="lat-chart-wrap">
           <canvas id="latentChart" role="img" aria-label="Horizontal bar chart of latent variable scores"></canvas>
@@ -687,20 +844,15 @@ function renderResult(d, { mode = 'full' } = {}) {
         <div class="muted" style="margin-top:6px">BD=Behavioral Discipline · IS=Income Stability · RP=Repayment Propensity · OR=Obligations Ratio · SC=Social Capital</div>
       </div>
 
-      <div class="card">
+      <div class="card fade-in" style="--delay:.25s">
         <h3><span class="tooltip" title="SHAP shows how features push the score up or down">SHAP Explanations</span></h3>
         <div class="muted" style="margin-bottom:8px">Grouped feature impact by category</div>
-        ${shapEntries.length > 0 ? groupedList.map(([group, val]) => {
-          const isPos = val > 0;
-          const width = Math.round((Math.abs(val) / shapMax) * 100);
-          return `<div class="shap-row">
-            <span class="shap-label">${group}</span>
-            <div class="shap-bar-wrap">
-              ${isPos ? `<div class="shap-bar-pos" style="width:${width}%"></div>` : `<div class="shap-bar-neg" style="width:${width}%"></div>`}
-            </div>
-            <span class="shap-val" style="color:${isPos?'#10b981':'#ef4444'}">${isPos?'+':''}${val.toFixed(3)}</span>
-          </div>`;
-        }).join('') : '<div class="muted">SHAP values unavailable (install shap package)</div>'}
+        ${shapEntries.length > 0 ? `
+          <div class="shap-chart-wrap">
+            <canvas id="shapChart" role="img" aria-label="Diverging bar chart of SHAP group impact"></canvas>
+          </div>
+          <div class="muted" style="margin-top:6px">Positive values increase the score; negative values reduce it.</div>
+        ` : '<div class="muted">SHAP values unavailable (install shap package)</div>'}
 
         <div style="margin-top:10px">
           <div class="muted">Top positive drivers</div>
@@ -727,10 +879,14 @@ function renderResult(d, { mode = 'full' } = {}) {
     <div style="font-size:11px;color:#94a3b8;text-align:right">Application ID: ${d.application_id || 'N/A'}</div>
   `;
 
+  lastResult = d;
+
   // Draw latent horizontal bar chart
   setTimeout(() => {
+    const { text, muted, grid } = getThemeColors();
     const ctx = document.getElementById('latentChart').getContext('2d');
-    new Chart(ctx, {
+    if (latentChartInstance) latentChartInstance.destroy();
+    latentChartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: latentDefs.map(l => l.key),
@@ -738,18 +894,53 @@ function renderResult(d, { mode = 'full' } = {}) {
           data: latentDefs.map(l => Math.round((d.latent_scores[l.key] ?? 0) * 100)),
           backgroundColor: latentDefs.map(l => l.color + 'cc'),
           borderColor: latentDefs.map(l => l.color),
-          borderWidth: 1.5, borderRadius: 5,
+          borderWidth: 1.5, borderRadius: 8,
         }]
       },
       options: {
         indexAxis: 'y',
         responsive: true, maintainAspectRatio: false,
-        scales: { x: { min: 0, max: 100, ticks: { font: { size: 10 }, color: '#94a3b8' }, grid: { color: '#f1f5f9' } }, y: { ticks: { font: { size: 10 }, color: '#475569' }, grid: { display: false } } },
+        scales: {
+          x: { min: 0, max: 100, ticks: { font: { size: 11 }, color: muted }, grid: { color: grid } },
+          y: { ticks: { font: { size: 11 }, color: text }, grid: { display: false } }
+        },
         plugins: { legend: { display: false } }
       }
     });
+
+    if (shapEntries.length > 0) {
+      const shapCtx = document.getElementById('shapChart').getContext('2d');
+      if (shapChartInstance) shapChartInstance.destroy();
+      const shapLabels = groupedList.map(([group]) => group);
+      const shapVals = groupedList.map(([, val]) => Number(val.toFixed(4)));
+      const maxAbs = Math.max(...shapVals.map(v => Math.abs(v)), 0.01);
+      shapChartInstance = new Chart(shapCtx, {
+        type: 'bar',
+        data: {
+          labels: shapLabels,
+          datasets: [{
+            data: shapVals,
+            backgroundColor: shapVals.map(v => v >= 0 ? 'rgba(22,163,74,.6)' : 'rgba(239,68,68,.6)'),
+            borderColor: shapVals.map(v => v >= 0 ? '#16a34a' : '#ef4444'),
+            borderWidth: 1.5, borderRadius: 8,
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            x: { min: -maxAbs, max: maxAbs, ticks: { font: { size: 11 }, color: muted }, grid: { color: grid } },
+            y: { ticks: { font: { size: 11 }, color: text }, grid: { display: false } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    updateChartTheme();
   }, 100);
 
+  if (window.lucide) lucide.createIcons();
   animateScore(d.alter_score);
 }
 
@@ -798,10 +989,32 @@ async function loadMetrics() {
   } catch {}
 }
 
+// ──────────────────────────────────────────────
+// THEME
+// ──────────────────────────────────────────────
+function setTheme(theme) {
+  if (theme === 'dark') document.body.setAttribute('data-theme', 'dark');
+  else document.body.removeAttribute('data-theme');
+  localStorage.setItem('theme', theme);
+  updateChartTheme();
+  if (window.lucide) lucide.createIcons();
+}
+
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('theme') || 'light';
+setTheme(savedTheme);
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    setTheme(isDark ? 'light' : 'dark');
+  });
+}
+
 // Init
 renderConsents();
 renderPsychoQuestions();
 updateWhatIfDisplay();
+if (window.lucide) lucide.createIcons();
 document.getElementById('f-income').addEventListener('input', (e) => {
   const val = parseInt(e.target.value, 10);
   if (!Number.isNaN(val)) {
