@@ -50,20 +50,33 @@ input:focus,select:focus{border-color:var(--teal)}
 .step-tabs{display:flex;gap:4px;margin-bottom:1.25rem;background:#f1f5f9;border-radius:10px;padding:3px}
 .step-tab{flex:1;padding:7px;text-align:center;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;color:#64748b;transition:all .15s}
 .step-tab.active{background:var(--surface);color:var(--teal-dark);box-shadow:var(--shadow)}
-.score-hero{background:linear-gradient(135deg,#0f172a 0%,#134e4a 100%);border-radius:16px;padding:2rem;display:grid;grid-template-columns:1fr 200px;gap:1.5rem;align-items:center;margin-bottom:1rem}
-.big-score{font-family:'Syne',sans-serif;font-size:4.5rem;font-weight:800;color:#fff;line-height:1}
-.big-score small{font-size:1.6rem;color:#475569}
-.score-grade{display:inline-block;padding:4px 14px;border-radius:7px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-top:10px}
-.score-left p{color:#94a3b8;font-size:13px;margin-top:8px}
-.decision-badge{display:inline-block;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:700;margin-top:12px}
-.badge-APPROVED{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
-.badge-CONDITIONAL{background:rgba(217,119,6,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
-.badge-REVIEW{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)}
+.score-hero{background:linear-gradient(135deg,#0f172a 0%,#134e4a 100%);border-radius:16px;padding:2rem;display:grid;grid-template-columns:1fr 240px;gap:1.5rem;align-items:center;margin-bottom:1rem}
+.score-stack{display:flex;flex-direction:column;gap:10px}
+.big-score{font-family:'Syne',sans-serif;font-size:4.6rem;font-weight:800;color:#fff;line-height:.95}
+.big-score small{font-size:1.4rem;color:#64748b}
+.score-subline{font-size:12px;color:#94a3b8}
+.decision-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.pill-approved{background:rgba(22,163,74,.18);color:#4ade80;border:1px solid rgba(74,222,128,.35)}
+.pill-review{background:rgba(217,119,6,.18);color:#fbbf24;border:1px solid rgba(251,191,36,.35)}
+.pill-reject{background:rgba(220,38,38,.18);color:#f87171;border:1px solid rgba(248,113,113,.35)}
+.risk-mini{display:flex;flex-direction:column;gap:8px;background:rgba(15,23,42,.55);border:1px solid rgba(148,163,184,.2);padding:12px;border-radius:12px;color:#e2e8f0}
+.risk-mini .label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8}
+.risk-mini .value{font-family:'Syne',sans-serif;font-size:1rem;color:#f8fafc}
+.kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
 .kv-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
 .kv-card{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.75rem;text-align:center}
 .kv-card .kv-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px}
 .kv-card .kv-val{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#0f172a}
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.charts-row{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;margin-bottom:1rem}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.muted{color:#94a3b8;font-size:11px}
+.hint{font-size:10px;color:#94a3b8}
+.pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pill{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#f8fafc;color:#475569}
+.pos{color:#059669}
+.neg{color:#dc2626}
+.lat-chart-wrap{height:220px;position:relative}
 .latent-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .latent-row:last-child{border-bottom:none}
 .latent-icon{width:26px;text-align:center;font-size:15px}
@@ -78,9 +91,20 @@ input:focus,select:focus{border-color:var(--teal)}
 .shap-bar-neg{height:100%;background:#ef4444;border-radius:4px;position:absolute;right:0}
 .shap-val{font-weight:600;font-size:11px;width:50px;text-align:right;color:#64748b}
 .econ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.econ-card{background:#f0fdfa;border:1px solid #a7f3d0;border-radius:10px;padding:.65rem;text-align:center}
-.econ-card .econ-label{font-size:10px;color:#0f766e;font-weight:600;text-transform:uppercase;margin-bottom:3px}
-.econ-card .econ-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#065f46}
+.econ-card{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.65rem;text-align:center}
+.econ-card .econ-label{font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;margin-bottom:3px}
+.econ-card .econ-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800}
+.econ-positive{color:#059669}
+.econ-negative{color:#dc2626}
+.econ-formula{font-size:10px;color:#94a3b8;margin-top:6px;text-align:center}
+.whatif-row{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center;margin-bottom:8px}
+.whatif-row input[type='range']{width:100%}
+.whatif-val{font-size:12px;font-weight:600;color:#0f172a;text-align:right}
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem}
+.preset-btn{background:#f8fafc;border:1.5px solid var(--border);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s}
+.preset-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
+.req{color:#ef4444;margin-left:4px}
+.tooltip{border-bottom:1px dotted #94a3b8;cursor:help}
 .spinner{width:40px;height:40px;border:3px solid rgba(13,148,136,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-center{text-align:center;padding:3rem;color:#64748b}
@@ -89,7 +113,7 @@ input:focus,select:focus{border-color:var(--teal)}
 .tab-content{display:none}.tab-content.active{display:block}
 .app-list-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:6px;cursor:pointer;transition:all .15s;font-size:13px}
 .app-list-row:hover{border-color:var(--teal);background:#f0fdfa}
-@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{max-height:none;border-right:none;border-bottom:1px solid var(--border)}.charts-row{grid-template-columns:1fr}.kv-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{max-height:none;border-right:none;border-bottom:1px solid var(--border)}.charts-row{grid-template-columns:1fr}.kv-grid{grid-template-columns:1fr 1fr}.result-grid{grid-template-columns:1fr}.score-hero{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -113,33 +137,43 @@ input:focus,select:focus{border-color:var(--teal)}
 
     <!-- PROFILE TAB -->
     <div class="tab-content active" id="tab-profile">
-      <div class="section-header">Borrower Profile</div>
-      <div class="field"><label>Full Name</label><input id="f-name" value="Rajesh Kumar"/></div>
-      <div class="field-row">
-        <div class="field"><label>Occupation</label>
-          <select id="f-occ">
-            <option value="msme">MSME Owner</option>
-            <option value="gig">Gig Worker</option>
-            <option value="farmer">Farmer</option>
-            <option value="salaried" selected>Salaried</option>
-            <option value="daily_wage">Daily Wage</option>
-          </select>
-        </div>
-        <div class="field"><label>Monthly Income (₹)</label><input id="f-income" type="number" value="22000"/></div>
+      <div class="section-header">Presets</div>
+      <div class="preset-row">
+        <button class="preset-btn" onclick="applyPreset('stable')">Stable Salaried</button>
+        <button class="preset-btn" onclick="applyPreset('gig')">Gig Worker</button>
+        <button class="preset-btn" onclick="applyPreset('high_risk')">High Risk</button>
       </div>
-      <div class="field-row">
-        <div class="field"><label>State</label>
-          <select id="f-state">
-            <option>West Bengal</option><option>Bihar</option><option>Uttar Pradesh</option>
-            <option>Maharashtra</option><option>Tamil Nadu</option><option>Rajasthan</option>
-          </select>
-        </div>
-        <div class="field"><label>Loan Purpose</label>
-          <select id="f-purpose">
-            <option>Business Expansion</option><option>Working Capital</option>
-            <option>Agricultural Input</option><option>Education</option><option>Medical</option>
-          </select>
-        </div>
+      <div class="hint" style="margin-bottom:1rem">Presets update inputs, consents, and psychometric answers.</div>
+
+      <div class="section-header">Personal Info</div>
+      <div class="field"><label>Full Name<span class="req">*</span></label><input id="f-name" value="Rajesh Kumar"/></div>
+      <div class="field"><label>State<span class="req">*</span></label>
+        <select id="f-state">
+          <option>West Bengal</option><option>Bihar</option><option>Uttar Pradesh</option>
+          <option>Maharashtra</option><option>Tamil Nadu</option><option>Rajasthan</option>
+        </select>
+      </div>
+
+      <div class="section-header">Financial Info</div>
+      <div class="field"><label>Occupation<span class="req">*</span></label>
+        <select id="f-occ">
+          <option value="msme">MSME Owner</option>
+          <option value="gig">Gig Worker</option>
+          <option value="farmer">Farmer</option>
+          <option value="salaried" selected>Salaried</option>
+          <option value="daily_wage">Daily Wage</option>
+        </select>
+      </div>
+      <div class="field"><label>Monthly Income (₹)<span class="req">*</span></label><input id="f-income" type="number" value="22000" min="5000" max="200000"/>
+        <div class="hint">Typical range: ₹5k–₹200k</div>
+      </div>
+
+      <div class="section-header">Loan Details</div>
+      <div class="field"><label>Loan Purpose<span class="req">*</span></label>
+        <select id="f-purpose">
+          <option>Business Expansion</option><option>Working Capital</option>
+          <option>Agricultural Input</option><option>Education</option><option>Medical</option>
+        </select>
       </div>
     </div>
 
@@ -162,6 +196,30 @@ input:focus,select:focus{border-color:var(--teal)}
       <div class="field"><label>Min Monthly Balance (₹)</label><input id="d-mmb" type="number" value="2500"/></div>
       <div class="field"><label>Merchant Avg Rating (1-5)</label><input id="d-rating" type="number" value="4.2" step="0.1" min="1" max="5"/></div>
       <div class="field"><label>Review Count</label><input id="d-reviews" type="number" value="23" min="0"/></div>
+      <div class="section-header" style="margin-top:1rem">What-if Analysis</div>
+      <div class="whatif-row">
+        <div>
+          <label>Income (₹)</label>
+          <input id="w-income" type="range" min="5000" max="200000" step="1000" value="22000" oninput="updateWhatIf('income')"/>
+        </div>
+        <div class="whatif-val" id="w-income-val">₹22,000</div>
+      </div>
+      <div class="whatif-row">
+        <div>
+          <label>Repayment Behavior</label>
+          <input id="w-repay" type="range" min="0" max="100" step="5" value="70" oninput="updateWhatIf('repay')"/>
+        </div>
+        <div class="whatif-val" id="w-repay-val">70</div>
+      </div>
+      <div class="whatif-row">
+        <div>
+          <label>Obligations</label>
+          <input id="w-obl" type="range" min="0" max="100" step="5" value="35" oninput="updateWhatIf('obl')"/>
+        </div>
+        <div class="whatif-val" id="w-obl-val">35</div>
+      </div>
+      <div class="hint">Changes auto-run scoring after a short pause.</div>
+      <div class="hint" id="whatif-status"></div>
     </div>
 
     <!-- PSYCHO TAB -->
@@ -291,25 +349,112 @@ window.setTab = (name) => {
 };
 
 // ──────────────────────────────────────────────
+// PRESETS
+// ──────────────────────────────────────────────
+const PRESETS = {
+  stable: {
+    profile: { name: 'Rajesh Kumar', occ: 'salaried', income: 42000, state: 'Maharashtra', purpose: 'Working Capital' },
+    data: { daysLate: 1, suspensions: 0, homeStasis: 82, utility: 60, inflowCV: 0.18, mmb: 6000, rating: 4.6, reviews: 54 },
+    consents: { telco: true, geo: true, psycho: true, ecom: true, merchant: true, bank: true },
+    psycho: { q1:'A',q2:'A',q3:'A',q4_trap:'A',q5:'A',q6:'A',q7:'A' },
+    whatif: { income: 42000, repay: 85, obl: 25 }
+  },
+  gig: {
+    profile: { name: 'Asha Verma', occ: 'gig', income: 18000, state: 'West Bengal', purpose: 'Business Expansion' },
+    data: { daysLate: 4, suspensions: 1, homeStasis: 62, utility: 52, inflowCV: 0.35, mmb: 1800, rating: 4.0, reviews: 18 },
+    consents: { telco: true, geo: true, psycho: true, ecom: true, merchant: false, bank: false },
+    psycho: { q1:'C',q2:'B',q3:'B',q4_trap:'B',q5:'B',q6:'B',q7:'B' },
+    whatif: { income: 18000, repay: 65, obl: 45 }
+  },
+  high_risk: {
+    profile: { name: 'Ravi Singh', occ: 'daily_wage', income: 12000, state: 'Bihar', purpose: 'Medical' },
+    data: { daysLate: 12, suspensions: 3, homeStasis: 48, utility: 40, inflowCV: 0.6, mmb: 800, rating: 3.2, reviews: 6 },
+    consents: { telco: true, geo: false, psycho: true, ecom: false, merchant: false, bank: false },
+    psycho: { q1:'D',q2:'C',q3:'C',q4_trap:'C',q5:'D',q6:'C',q7:'D' },
+    whatif: { income: 12000, repay: 40, obl: 70 }
+  }
+};
+
+window.applyPreset = (key) => {
+  const preset = PRESETS[key];
+  if (!preset) return;
+  document.getElementById('f-name').value = preset.profile.name;
+  document.getElementById('f-occ').value = preset.profile.occ;
+  document.getElementById('f-income').value = preset.profile.income;
+  document.getElementById('f-state').value = preset.profile.state;
+  document.getElementById('f-purpose').value = preset.profile.purpose;
+
+  document.getElementById('d-days-late').value = preset.data.daysLate;
+  document.getElementById('d-suspensions').value = preset.data.suspensions;
+  document.getElementById('d-home-stasis').value = preset.data.homeStasis;
+  document.getElementById('d-utility').value = preset.data.utility;
+  document.getElementById('d-inflow-cv').value = preset.data.inflowCV;
+  document.getElementById('d-mmb').value = preset.data.mmb;
+  document.getElementById('d-rating').value = preset.data.rating;
+  document.getElementById('d-reviews').value = preset.data.reviews;
+
+  consentState = { ...preset.consents };
+  psychoAnswers = { ...preset.psycho };
+  renderConsents();
+  renderPsychoQuestions();
+
+  whatIfState = { ...preset.whatif };
+  document.getElementById('w-income').value = preset.whatif.income;
+  document.getElementById('w-repay').value = preset.whatif.repay;
+  document.getElementById('w-obl').value = preset.whatif.obl;
+  updateWhatIfDisplay();
+};
+
+// ──────────────────────────────────────────────
 // SCORING
 // ──────────────────────────────────────────────
-window.runScoring = async () => {
-  const btn = document.getElementById('scoreBtn');
-  btn.disabled = true;
-  btn.textContent = 'Scoring…';
-  document.getElementById('welcomePanel').style.display = 'none';
-  document.getElementById('loadingPanel').style.display = 'block';
-  document.getElementById('resultPanel').style.display = 'none';
+let whatIfState = { income: 22000, repay: 70, obl: 35 };
+let whatIfTimer = null;
+let lastScore = null;
 
-  const daysLate = parseFloat(document.getElementById('d-days-late').value) || 2;
-  const suspensions = parseInt(document.getElementById('d-suspensions').value) || 0;
+function formatInr(v) {
+  return `₹${Math.round(v).toLocaleString('en-IN')}`;
+}
+
+function updateWhatIfDisplay() {
+  document.getElementById('w-income-val').textContent = formatInr(whatIfState.income);
+  document.getElementById('w-repay-val').textContent = `${whatIfState.repay}`;
+  document.getElementById('w-obl-val').textContent = `${whatIfState.obl}`;
+}
+
+window.updateWhatIf = (key) => {
+  if (key === 'income') whatIfState.income = parseInt(document.getElementById('w-income').value, 10);
+  if (key === 'repay') whatIfState.repay = parseInt(document.getElementById('w-repay').value, 10);
+  if (key === 'obl') whatIfState.obl = parseInt(document.getElementById('w-obl').value, 10);
+  updateWhatIfDisplay();
+  scheduleWhatIf();
+};
+
+function scheduleWhatIf() {
+  const status = document.getElementById('whatif-status');
+  status.textContent = 'Updating…';
+  clearTimeout(whatIfTimer);
+  whatIfTimer = setTimeout(() => runScoring({ mode: 'whatif' }), 650);
+}
+
+function buildPayload() {
+  const daysLateBase = parseFloat(document.getElementById('d-days-late').value) || 2;
+  const suspensionsBase = parseInt(document.getElementById('d-suspensions').value, 10) || 0;
   const homeStasis = (parseFloat(document.getElementById('d-home-stasis').value) || 75) / 100;
   const utility = (parseFloat(document.getElementById('d-utility').value) || 65) / 100;
-  const inflowCV = parseFloat(document.getElementById('d-inflow-cv').value) || 0.25;
-  const mmb = parseFloat(document.getElementById('d-mmb').value) || 2500;
+  const inflowCVBase = parseFloat(document.getElementById('d-inflow-cv').value) || 0.25;
+  const mmbBase = parseFloat(document.getElementById('d-mmb').value) || 2500;
   const rating = parseFloat(document.getElementById('d-rating').value) || 4.2;
-  const reviews = parseInt(document.getElementById('d-reviews').value) || 23;
-  const income = parseFloat(document.getElementById('f-income').value) || 22000;
+  const reviews = parseInt(document.getElementById('d-reviews').value, 10) || 23;
+  const incomeBase = parseFloat(document.getElementById('f-income').value) || 22000;
+
+  const repayFactor = 1 - (whatIfState.repay - 50) / 200;
+  const oblFactor = 1 + (whatIfState.obl - 50) / 100;
+  const income = Math.max(5000, whatIfState.income || incomeBase);
+  const daysLate = Math.max(0, daysLateBase * repayFactor);
+  const suspensions = Math.max(0, Math.round(suspensionsBase * repayFactor));
+  const inflowCV = Math.min(1, inflowCVBase * oblFactor);
+  const mmb = Math.max(500, mmbBase / oblFactor);
 
   const payload = {
     borrower: {
@@ -319,9 +464,9 @@ window.runScoring = async () => {
       state: document.getElementById('f-state').value,
       loan_purpose: document.getElementById('f-purpose').value,
     },
-    consent: { ...consentState, telco_consent: consentState.telco, geo_consent: consentState.geo, psycho_consent: consentState.psycho, ecom_consent: consentState.ecom, merchant_consent: consentState.merchant, bank_consent: consentState.bank },
+    consent: { ...consentState },
     telco: consentState.telco ? {
-      payments: Array.from({length: 6}, (_, i) => ({ days_late: Math.max(0, daysLate + (Math.random()-0.5)*2) })),
+      payments: Array.from({length: 6}, () => ({ days_late: Math.max(0, daysLate + (Math.random()-0.5)*2) })),
       suspensions, recharge_intervals_days: [28,29,28,30,27,29], advance_recharge_ratio: 0.3,
     } : null,
     geo: consentState.geo ? {
@@ -329,7 +474,7 @@ window.runScoring = async () => {
       location_entropy: 1.4, unique_locations_30d: 6, radius_of_gyration_km: 4.5,
     } : null,
     psychometrics: consentState.psycho ? {
-      answers: Object.keys(QUESTIONS.reduce((a, q) => ({...a, [q.id]: true}), {})).length > 0 ? psychoAnswers : { q1:'B',q2:'A',q3:'A',q4_trap:'A',q5:'A',q6:'A',q7:'A' },
+      answers: Object.keys(psychoAnswers).length > 0 ? psychoAnswers : { q1:'B',q2:'A',q3:'A',q4_trap:'A',q5:'A',q6:'A',q7:'A' },
       avg_response_time_seconds: 12,
     } : null,
     ecommerce: consentState.ecom ? {
@@ -351,121 +496,221 @@ window.runScoring = async () => {
       min_monthly_balance: mmb, avg_monthly_balance: mmb * 2.5, salary_regularity_flag: 1,
     } : null,
   };
-  // Fix consent keys for Pydantic
+
   payload.consent = {
     telco_consent: consentState.telco, geo_consent: consentState.geo,
     psycho_consent: consentState.psycho, ecom_consent: consentState.ecom,
     merchant_consent: consentState.merchant, bank_consent: consentState.bank,
   };
 
+  return payload;
+}
+
+window.runScoring = async ({ mode = 'full' } = {}) => {
+  const btn = document.getElementById('scoreBtn');
+  const isFull = mode === 'full';
+
+  if (isFull) {
+    btn.disabled = true;
+    btn.textContent = 'Scoring…';
+    document.getElementById('welcomePanel').style.display = 'none';
+    document.getElementById('loadingPanel').style.display = 'block';
+    document.getElementById('resultPanel').style.display = 'none';
+  }
+
   try {
+    const payload = buildPayload();
     const res = await fetch(`${API}/score`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.detail || 'Scoring failed');
     }
     const data = await res.json();
-    renderResult(data);
+    renderResult(data, { mode });
   } catch (e) {
     document.getElementById('loadingPanel').style.display = 'none';
     document.getElementById('resultPanel').style.display = 'block';
     document.getElementById('resultPanel').innerHTML = `<div class="alert-warn">⚠️ ${e.message}</div>`;
   } finally {
-    btn.disabled = false;
-    btn.textContent = '⚡ Run AlterScore';
+    if (isFull) {
+      btn.disabled = false;
+      btn.textContent = '⚡ Run AlterScore';
+    }
+    if (!isFull) {
+      const status = document.getElementById('whatif-status');
+      status.textContent = 'Updated';
+    }
   }
 };
 
 // ──────────────────────────────────────────────
 // RESULT RENDERING
 // ──────────────────────────────────────────────
-function renderResult(d) {
+function animateScore(target) {
+  const el = document.getElementById('scoreValue');
+  if (!el) return;
+  const start = lastScore !== null ? lastScore : Math.max(300, target - 40);
+  const duration = 700;
+  const startTime = performance.now();
+  const step = (now) => {
+    const progress = Math.min(1, (now - startTime) / duration);
+    const val = Math.round(start + (target - start) * progress);
+    el.textContent = val;
+    if (progress < 1) requestAnimationFrame(step);
+    else lastScore = target;
+  };
+  requestAnimationFrame(step);
+}
+
+function renderResult(d, { mode = 'full' } = {}) {
   document.getElementById('loadingPanel').style.display = 'none';
   const panel = document.getElementById('resultPanel');
   panel.style.display = 'block';
 
-  const gradeMap = { Exceptional:'grade-good', 'Very Good':'grade-good', Good:'grade-good', Fair:'grade-fair', Poor:'grade-poor' };
-  const gradeColors = { Exceptional:'#4ade80', 'Very Good':'#4ade80', Good:'#60a5fa', Fair:'#fbbf24', Poor:'#f87171' };
-  const gradeBg = { Exceptional:'rgba(74,222,128,.15)', 'Very Good':'rgba(74,222,128,.15)', Good:'rgba(96,165,250,.15)', Fair:'rgba(251,191,36,.15)', Poor:'rgba(248,113,113,.15)' };
-  const gradeColor = gradeColors[d.tier_name] || '#60a5fa';
-  const gradeBgCol = gradeBg[d.tier_name] || 'rgba(96,165,250,.15)';
-
   const latentDefs = [
     { key:'BD', label:'Behavioral Discipline', icon:'🎯', color:'#6366f1' },
     { key:'IS', label:'Income Stability', icon:'📈', color:'#10b981' },
-    { key:'RP', label:'Risk Preference', icon:'🎲', color:'#f59e0b' },
-    { key:'OR', label:'Operational Reliability', icon:'⚙️', color:'#ec4899' },
-    { key:'SC', label:'Structural Constraints', icon:'🌍', color:'#06b6d4' },
+    { key:'RP', label:'Repayment Propensity', icon:'🧾', color:'#f59e0b' },
+    { key:'OR', label:'Obligations Ratio', icon:'⚖️', color:'#ec4899' },
+    { key:'SC', label:'Social Capital', icon:'🤝', color:'#06b6d4' },
   ];
 
-  const shapEntries = Object.entries(d.shap_values || {}).slice(0, 8);
-  const shapMax = Math.max(...shapEntries.map(([,v]) => Math.abs(v)), 0.01);
+  const decisionText = ['APPROVED','REVIEW','REJECT'].includes(d.decision) ? d.decision : (d.decision === 'CONDITIONAL' ? 'REVIEW' : 'REVIEW');
+  const decisionClass = decisionText === 'APPROVED' ? 'pill-approved' : decisionText === 'REJECT' ? 'pill-reject' : 'pill-review';
+  const percentile = Math.max(1, Math.min(99, Math.round(((d.alter_score - 300) / 600) * 100)));
 
   const prettyFeature = (k) => k.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 28);
+
+  const shapValues = d.shap_values || {};
+  const shapEntries = Object.entries(shapValues);
+  const shapMax = Math.max(...shapEntries.map(([,v]) => Math.abs(v)), 0.01);
+
+  const groupForFeature = (name) => {
+    const n = name.toLowerCase();
+    if (/(late|delay|suspend|bill|payment|repay|due|default|miss)/.test(n)) return 'Behavioral';
+    if (/(income|salary|inflow|balance|cash|bank|mmb|monthly_balance)/.test(n)) return 'Income';
+    if (/(risk|pd|loss|volatility|cv|entropy|irregular|ratio)/.test(n)) return 'Risk';
+    if (/(spend|ecom|purchase|merchant|rating|review|utility|transaction|grocer|electronics)/.test(n)) return 'Spending';
+    return 'Risk';
+  };
+
+  const grouped = { Behavioral: 0, Income: 0, Risk: 0, Spending: 0 };
+  shapEntries.forEach(([feat, val]) => { grouped[groupForFeature(feat)] += val; });
+  const groupedList = Object.entries(grouped).sort((a,b) => Math.abs(b[1]) - Math.abs(a[1]));
+
+  const posFeatures = shapEntries.filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]).slice(0, 3);
+  const negFeatures = shapEntries.filter(([,v]) => v < 0).sort((a,b) => a[1]-b[1]).slice(0, 3);
+
+  const posGroups = groupedList.filter(([,v]) => v > 0).slice(0, 2).map(([g]) => g.toLowerCase());
+  const negGroups = groupedList.filter(([,v]) => v < 0).slice(0, 2).map(([g]) => g.toLowerCase());
+  const posSentence = posGroups.length ? `Score increased due to ${posGroups.join(' and ')}.` : 'Score increased due to positive signals.';
+  const negSentence = negGroups.length ? `Score decreased due to ${negGroups.join(' and ')}.` : 'Score decreased due to risk signals.';
 
   panel.innerHTML = `
     <!-- Score Hero -->
     <div class="score-hero">
-      <div class="score-left">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:6px">YOUR ALTERSCORE</div>
-        <div class="big-score">${d.alter_score}<small>/900</small></div>
-        <div class="score-grade" style="background:${gradeBgCol};color:${gradeColor};border:1px solid ${gradeColor}33">${d.tier_name.toUpperCase()}</div>
-        <div class="decision-badge badge-${d.decision}">${d.decision}</div>
-        <p style="margin-top:8px;font-size:12px;color:#94a3b8">Confidence: ${(d.confidence * 100).toFixed(0)}% · Segment: ${d.segment.name}</p>
-        <p style="font-size:12px;color:#475569;margin-top:4px">PD: ${(d.pd_calibrated * 100).toFixed(1)}% · Risk Band: ${d.risk_band}</p>
+      <div class="score-stack">
+        <div class="score-subline">YOUR ALTERSCORE</div>
+        <div class="big-score"><span id="scoreValue">${d.alter_score}</span><small>/900</small></div>
+        <div class="decision-pill ${decisionClass}">${decisionText} · Risk Band ${d.risk_band}</div>
+        <div class="score-subline"><span class="tooltip" title="Probability of default">Default Risk</span>: ${(d.pd_calibrated * 100).toFixed(1)}% · Confidence: ${(d.confidence * 100).toFixed(0)}% · Segment: ${d.segment.name}</div>
+        <div class="score-subline">Better than ${percentile}% of applicants · Typical approval score: 650+</div>
       </div>
-      <div id="radarWrap" style="width:180px;height:180px;position:relative">
-        <canvas id="radarChart" role="img" aria-label="Radar chart of latent variable scores"></canvas>
+      <div class="risk-mini">
+        <div>
+          <div class="label">Decision</div>
+          <div class="value">${decisionText}</div>
+        </div>
+        <div>
+          <div class="label">Tier</div>
+          <div class="value">${d.tier_name}</div>
+        </div>
+        <div>
+          <div class="label">Credit Limit</div>
+          <div class="value">₹${(d.credit_limit_inr/1000).toFixed(0)}K</div>
+        </div>
+        <div>
+          <div class="label">Rate</div>
+          <div class="value">${d.interest_rate_pct}% p.a.</div>
+        </div>
       </div>
     </div>
 
-    <!-- KV Cards -->
-    <div class="kv-grid">
-      <div class="kv-card"><div class="kv-label">Credit Limit</div><div class="kv-val">₹${(d.credit_limit_inr/1000).toFixed(0)}K</div></div>
-      <div class="kv-card"><div class="kv-label">Interest Rate</div><div class="kv-val">${d.interest_rate_pct}% p.a.</div></div>
-      <div class="kv-card"><div class="kv-label">Monitoring</div><div class="kv-val" style="font-size:.85rem">${d.monitoring_intensity}</div></div>
-      <div class="kv-card"><div class="kv-label">Exp. Revenue</div><div class="kv-val" style="color:#059669">₹${(d.economic_analysis.ev_revenue).toFixed(0)}</div></div>
-      <div class="kv-card"><div class="kv-label">Exp. Loss</div><div class="kv-val" style="color:#dc2626">₹${(d.economic_analysis.ev_loss).toFixed(0)}</div></div>
-      <div class="kv-card"><div class="kv-label">Exp. Profit</div><div class="kv-val" style="color:${d.economic_analysis.ev_profit>0?'#059669':'#dc2626'}">₹${(d.economic_analysis.ev_profit).toFixed(0)}</div></div>
+    <div class="result-grid">
+      <div class="result-card">
+        <h3>Risk Details</h3>
+        <div class="pill-row">
+          <span class="pill"><span class="tooltip" title="Probability of default">Default Risk</span>: ${(d.pd_calibrated * 100).toFixed(1)}%</span>
+          <span class="pill">Confidence: ${(d.confidence * 100).toFixed(0)}%</span>
+          <span class="pill">Segment: ${d.segment.name}</span>
+          <span class="pill">Risk Band: ${d.risk_band}</span>
+          <span class="pill">Review Frequency: ${d.monitoring_intensity}</span>
+        </div>
+        <div class="muted" style="margin-top:8px">Decision context based on model confidence and banding.</div>
+      </div>
+
+      <div class="result-card">
+        <h3>Economics</h3>
+        <div class="econ-grid">
+          <div class="econ-card">
+            <div class="econ-label">Expected Profit (per loan)</div>
+            <div class="econ-val ${d.economic_analysis.ev_profit > 0 ? 'econ-positive' : 'econ-negative'}">₹${(d.economic_analysis.ev_profit).toFixed(0)}</div>
+          </div>
+          <div class="econ-card">
+            <div class="econ-label">Expected Loss</div>
+            <div class="econ-val econ-negative">₹${(d.economic_analysis.ev_loss).toFixed(0)}</div>
+          </div>
+          <div class="econ-card">
+            <div class="econ-label">Expected Revenue</div>
+            <div class="econ-val econ-positive">₹${(d.economic_analysis.ev_revenue).toFixed(0)}</div>
+          </div>
+        </div>
+        <div class="econ-formula">Profit = Revenue − Loss</div>
+      </div>
+
+      <div class="result-card">
+        <h3>Why This Decision?</h3>
+        <div class="pill-row">
+          ${posFeatures.slice(0,2).map(([feat]) => `<span class="pill pos">+ ${prettyFeature(feat)}</span>`).join('')}
+          ${negFeatures.slice(0,2).map(([feat]) => `<span class="pill neg">- ${prettyFeature(feat)}</span>`).join('')}
+        </div>
+        <div class="muted" style="margin-top:8px">Signals driving the score for this application.</div>
+      </div>
     </div>
 
-    <!-- Charts row -->
     <div class="charts-row">
-      <!-- Latent Variables -->
       <div class="card">
-        <h3>Latent Variable Scores</h3>
-        ${latentDefs.map(l => {
-          const score = d.latent_scores[l.key] ?? 0;
-          const pct = Math.round(score * 100);
-          const color = score >= 0.7 ? '#10b981' : score >= 0.45 ? '#f59e0b' : '#ef4444';
-          return `<div class="latent-row">
-            <span class="latent-icon">${l.icon}</span>
-            <span class="latent-label">${l.label}</span>
-            <div class="latent-bar-wrap"><div class="latent-bar" style="width:${pct}%;background:${l.color}"></div></div>
-            <span class="latent-score" style="color:${color}">${pct}</span>
-          </div>`;
-        }).join('')}
-        <div style="font-size:10px;color:#94a3b8;margin-top:8px">BD=Behavioral Discipline · IS=Income Stability · RP=Risk Preference · OR=Operational Reliability · SC=Structural Constraints</div>
+        <h3><span class="tooltip" title="Latent variables are model-derived factors">Latent Variable Scores</span></h3>
+        <div class="lat-chart-wrap">
+          <canvas id="latentChart" role="img" aria-label="Horizontal bar chart of latent variable scores"></canvas>
+        </div>
+        <div class="muted" style="margin-top:6px">BD=Behavioral Discipline · IS=Income Stability · RP=Repayment Propensity · OR=Obligations Ratio · SC=Social Capital</div>
       </div>
 
-      <!-- SHAP Values -->
       <div class="card">
-        <h3>SHAP Feature Importance</h3>
-        <div style="font-size:10px;color:#94a3b8;margin-bottom:8px">Top predictors for this application (XGBoost)</div>
-        ${shapEntries.length > 0 ? shapEntries.map(([feat, val]) => {
+        <h3><span class="tooltip" title="SHAP shows how features push the score up or down">SHAP Explanations</span></h3>
+        <div class="muted" style="margin-bottom:8px">Grouped feature impact by category</div>
+        ${shapEntries.length > 0 ? groupedList.map(([group, val]) => {
           const isPos = val > 0;
           const width = Math.round((Math.abs(val) / shapMax) * 100);
           return `<div class="shap-row">
-            <span class="shap-label">${prettyFeature(feat)}</span>
+            <span class="shap-label">${group}</span>
             <div class="shap-bar-wrap">
               ${isPos ? `<div class="shap-bar-pos" style="width:${width}%"></div>` : `<div class="shap-bar-neg" style="width:${width}%"></div>`}
             </div>
             <span class="shap-val" style="color:${isPos?'#10b981':'#ef4444'}">${isPos?'+':''}${val.toFixed(3)}</span>
           </div>`;
-        }).join('') : '<div style="color:#94a3b8;font-size:12px">SHAP values unavailable (install shap package)</div>'}
-        <div id="barWrap" style="height:130px;position:relative;margin-top:.75rem">
-          <canvas id="barChart" role="img" aria-label="Bar chart of score components"></canvas>
+        }).join('') : '<div class="muted">SHAP values unavailable (install shap package)</div>'}
+
+        <div style="margin-top:10px">
+          <div class="muted">Top positive drivers</div>
+          ${posFeatures.length ? posFeatures.map(([feat, val]) => `<div class="shap-row"><span class="shap-label">${prettyFeature(feat)}</span><span class="shap-val" style="color:#10b981">+${val.toFixed(3)}</span></div>`).join('') : '<div class="muted">No positive drivers</div>'}
         </div>
+        <div style="margin-top:8px">
+          <div class="muted">Top negative drivers</div>
+          ${negFeatures.length ? negFeatures.map(([feat, val]) => `<div class="shap-row"><span class="shap-label">${prettyFeature(feat)}</span><span class="shap-val" style="color:#ef4444">${val.toFixed(3)}</span></div>`).join('') : '<div class="muted">No negative drivers</div>'}
+        </div>
+        <div style="margin-top:10px" class="muted">${posSentence} ${negSentence}</div>
       </div>
     </div>
 
@@ -482,30 +727,10 @@ function renderResult(d) {
     <div style="font-size:11px;color:#94a3b8;text-align:right">Application ID: ${d.application_id || 'N/A'}</div>
   `;
 
-  // Draw radar chart
+  // Draw latent horizontal bar chart
   setTimeout(() => {
-    const ctx = document.getElementById('radarChart').getContext('2d');
+    const ctx = document.getElementById('latentChart').getContext('2d');
     new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: latentDefs.map(l => l.key),
-        datasets: [{
-          data: latentDefs.map(l => Math.round((d.latent_scores[l.key] ?? 0) * 100)),
-          backgroundColor: 'rgba(13,148,136,.15)',
-          borderColor: '#0d9488', borderWidth: 2,
-          pointBackgroundColor: '#0d9488', pointRadius: 4,
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(255,255,255,.1)' }, angleLines: { color: 'rgba(255,255,255,.1)' }, pointLabels: { color: '#94a3b8', font: { size: 10 } } } },
-        plugins: { legend: { display: false } }
-      }
-    });
-
-    // Bar chart for latent scores
-    const bCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(bCtx, {
       type: 'bar',
       data: {
         labels: latentDefs.map(l => l.key),
@@ -517,12 +742,15 @@ function renderResult(d) {
         }]
       },
       options: {
+        indexAxis: 'y',
         responsive: true, maintainAspectRatio: false,
-        scales: { y: { min: 0, max: 100, ticks: { font: { size: 9 }, color: '#94a3b8' }, grid: { color: '#f1f5f9' } }, x: { ticks: { font: { size: 9 }, color: '#475569' }, grid: { display: false } } },
+        scales: { x: { min: 0, max: 100, ticks: { font: { size: 10 }, color: '#94a3b8' }, grid: { color: '#f1f5f9' } }, y: { ticks: { font: { size: 10 }, color: '#475569' }, grid: { display: false } } },
         plugins: { legend: { display: false } }
       }
     });
   }, 100);
+
+  animateScore(d.alter_score);
 }
 
 // ──────────────────────────────────────────────
@@ -573,6 +801,15 @@ async function loadMetrics() {
 // Init
 renderConsents();
 renderPsychoQuestions();
+updateWhatIfDisplay();
+document.getElementById('f-income').addEventListener('input', (e) => {
+  const val = parseInt(e.target.value, 10);
+  if (!Number.isNaN(val)) {
+    whatIfState.income = val;
+    document.getElementById('w-income').value = val;
+    updateWhatIfDisplay();
+  }
+});
 checkHealth();
 setInterval(checkHealth, 30000);
 </script>
