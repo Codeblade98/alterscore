@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AlterScore — AI Credit for the Credit-Invisible
 
 **Production-grade, research-grounded AI credit scoring system for thin-file and no-file borrowers (individuals + MSMEs).**
@@ -247,3 +248,4 @@ Add `python-jose` + `passlib` and wrap routes with `Depends(get_current_user)`.
 3. Sahamati / AA Framework — *"Cash Flow-Based Lending for MSMEs"*
 4. ICIS 2019 — *"Alternative Data for Credit Scoring"*
 5. SME Default Scientometrics Review — *"Machine Learning for SME Credit Risk"*
+=======
